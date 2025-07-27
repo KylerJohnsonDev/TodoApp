@@ -75,6 +75,24 @@ public class AuthController : ControllerBase
         return Ok(new { message = "If the email exists, a password reset link has been sent" });
     }
 
+    [HttpPost("logout")]
+    [Authorize]
+    public IActionResult Logout()
+    {
+        // With JWT tokens, logout is typically handled client-side by discarding the token
+        // Here we can log the logout event, invalidate refresh tokens, etc.
+        
+        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        var userId = User.FindFirst("userId")?.Value;
+        
+        // TODO: In a production app, you might want to:
+        // 1. Add the token to a blacklist/revocation list
+        // 2. Log the logout event
+        // 3. Invalidate any refresh tokens
+        
+        return Ok(new { message = "Successfully logged out", username });
+    }
+
     [HttpGet("profile")]
     [Authorize]
     public IActionResult GetProfile()
