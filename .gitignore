@@ -1,0 +1,24 @@
+# Build output
+backend/TodoApi/bin/
+backend/TodoApi/obj/
+
+# Visual Studio files
+backend/TodoApi/.vs/
+backend/TodoApi/*.suo
+backend/TodoApi/*.user
+backend/TodoApi/*.log
+backend/TodoApi/*.tmp
+backend/TodoApi/*.bak
+
+# NuGet
+backend/TodoApi/packages/
+backend/TodoApi/*.nuget.props
+backend/TodoApi/*.nuget.targets
+
+# Configuration
+backend/TodoApi/appsettings.Development.json
+backend/TodoApi/*.pubxml.user
+
+# OS-specific
+backend/TodoApi/.DS_Store
+backend/TodoApi/Thumbs.db
