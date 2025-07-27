@@ -12,6 +12,7 @@ public interface ITodoService
     Task<TodoResponseDto> CreateTodoAsync(CreateTodoDto createTodoDto, int userId);
     Task<TodoResponseDto?> UpdateTodoAsync(int id, UpdateTodoDto updateTodoDto, int userId);
     Task<bool> DeleteTodoAsync(int id, int userId);
+    Task<int> DeleteMultipleTodosAsync(int[] todoIds, int userId);
 }
 
 public class TodoService : ITodoService
@@ -127,5 +128,20 @@ public class TodoService : ITodoService
         _context.Todos.Remove(todo);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<int> DeleteMultipleTodosAsync(int[] todoIds, int userId)
+    {
+        var todosToDelete = await _context.Todos
+            .Where(t => todoIds.Contains(t.Id) && t.UserId == userId)
+            .ToListAsync();
+
+        if (!todosToDelete.Any())
+            return 0;
+
+        _context.Todos.RemoveRange(todosToDelete);
+        await _context.SaveChangesAsync();
+        
+        return todosToDelete.Count;
     }
 }

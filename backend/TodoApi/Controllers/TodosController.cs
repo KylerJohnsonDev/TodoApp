@@ -117,4 +117,27 @@ public class TodosController : ControllerBase
             return Unauthorized();
         }
     }
+
+    [HttpDelete("bulk")]
+    public async Task<IActionResult> DeleteMultipleTodos(DeleteMultipleTodosDto deleteMultipleTodosDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        try
+        {
+            var userId = GetCurrentUserId();
+            var deletedCount = await _todoService.DeleteMultipleTodosAsync(deleteMultipleTodosDto.TodoIds, userId);
+            
+            return Ok(new { 
+                message = $"Successfully deleted {deletedCount} todo(s)",
+                deletedCount = deletedCount,
+                requestedCount = deleteMultipleTodosDto.TodoIds.Length
+            });
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Unauthorized();
+        }
+    }
 }

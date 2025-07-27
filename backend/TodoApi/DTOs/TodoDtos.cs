@@ -17,6 +17,13 @@ public class UpdateTodoDto
     public bool? IsCompleted { get; set; }
 }
 
+public class DeleteMultipleTodosDto
+{
+    [Required]
+    [MinLength(1, ErrorMessage = "At least one todo ID must be provided")]
+    public int[] TodoIds { get; set; } = Array.Empty<int>();
+}
+
 public class TodoResponseDto
 {
     public int Id { get; set; }
