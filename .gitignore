@@ -22,3 +22,6 @@ backend/TodoApi/*.pubxml.user
 # OS-specific
 backend/TodoApi/.DS_Store
 backend/TodoApi/Thumbs.db
+
+# Database
+backend/TodoApi/todoapp.db
