@@ -31,8 +31,7 @@ public class TodoService : ITodoService
             .Select(t => new TodoResponseDto
             {
                 Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
+                Text = t.Text,
                 IsCompleted = t.IsCompleted,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
@@ -50,8 +49,7 @@ public class TodoService : ITodoService
             .Select(t => new TodoResponseDto
             {
                 Id = t.Id,
-                Title = t.Title,
-                Description = t.Description,
+                Text = t.Text,
                 IsCompleted = t.IsCompleted,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
@@ -66,8 +64,7 @@ public class TodoService : ITodoService
     {
         var todo = new Todo
         {
-            Title = createTodoDto.Title,
-            Description = createTodoDto.Description,
+            Text = createTodoDto.Text,
             UserId = userId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
@@ -79,8 +76,7 @@ public class TodoService : ITodoService
         return new TodoResponseDto
         {
             Id = todo.Id,
-            Title = todo.Title,
-            Description = todo.Description,
+            Text = todo.Text,
             IsCompleted = todo.IsCompleted,
             CreatedAt = todo.CreatedAt,
             UpdatedAt = todo.UpdatedAt,
@@ -96,11 +92,8 @@ public class TodoService : ITodoService
         if (todo == null)
             return null;
 
-        if (!string.IsNullOrEmpty(updateTodoDto.Title))
-            todo.Title = updateTodoDto.Title;
-
-        if (updateTodoDto.Description != null)
-            todo.Description = updateTodoDto.Description;
+        if (!string.IsNullOrEmpty(updateTodoDto.Text))
+            todo.Text = updateTodoDto.Text;
 
         if (updateTodoDto.IsCompleted.HasValue)
         {
@@ -115,8 +108,7 @@ public class TodoService : ITodoService
         return new TodoResponseDto
         {
             Id = todo.Id,
-            Title = todo.Title,
-            Description = todo.Description,
+            Text = todo.Text,
             IsCompleted = todo.IsCompleted,
             CreatedAt = todo.CreatedAt,
             UpdatedAt = todo.UpdatedAt,
