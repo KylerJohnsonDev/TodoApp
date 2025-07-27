@@ -1,0 +1,88 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using TodoApi.DTOs;
+using TodoApi.Services;
+
+namespace TodoApi.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class AuthController : ControllerBase
+{
+    private readonly IAuthService _authService;
+
+    public AuthController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
+    [HttpPost("register")]
+    public async Task<ActionResult<AuthResponseDto>> Register(RegisterDto registerDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _authService.RegisterAsync(registerDto);
+        
+        if (result == null)
+            return BadRequest(new { message = "Username or email already exists" });
+
+        return Ok(result);
+    }
+
+    [HttpPost("login")]
+    public async Task<ActionResult<AuthResponseDto>> Login(LoginDto loginDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var result = await _authService.LoginAsync(loginDto);
+        
+        if (result == null)
+            return Unauthorized(new { message = "Invalid username/email or password" });
+
+        return Ok(result);
+    }
+
+    [HttpPost("change-password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var userIdClaim = User.FindFirst("userId")?.Value;
+        if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
+            return Unauthorized();
+
+        var result = await _authService.ChangePasswordAsync(userId, changePasswordDto);
+        
+        if (!result)
+            return BadRequest(new { message = "Current password is incorrect" });
+
+        return Ok(new { message = "Password changed successfully" });
+    }
+
+    [HttpPost("reset-password")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        // In a real application, you would send a reset password email
+        // For now, we'll just return a success message
+        return Ok(new { message = "If the email exists, a password reset link has been sent" });
+    }
+
+    [HttpGet("profile")]
+    [Authorize]
+    public IActionResult GetProfile()
+    {
+        var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        var userId = User.FindFirst("userId")?.Value;
+
+        return Ok(new { username, email, userId });
+    }
+}
