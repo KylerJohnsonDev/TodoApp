@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using TodoApi.Auth;
 
-namespace TodoApi.Models;
+namespace TodoApi.Todos;
 
 public class Todo
 {

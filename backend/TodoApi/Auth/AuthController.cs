@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using TodoApi.DTOs;
-using TodoApi.Services;
+using TodoApi.Auth;
 
-namespace TodoApi.Controllers;
+namespace TodoApi.Auth;
 
 [ApiController]
 [Route("api/[controller]")]

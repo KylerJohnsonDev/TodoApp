@@ -1,10 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
-using TodoApi.DTOs;
-using TodoApi.Models;
+using TodoApi.Auth;
 using BCrypt.Net;
 
-namespace TodoApi.Services;
+namespace TodoApi.Auth;
 
 public interface IAuthService
 {

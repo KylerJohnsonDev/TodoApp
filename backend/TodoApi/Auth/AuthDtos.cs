@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TodoApi.DTOs;
+namespace TodoApi.Auth;
 
 public class RegisterDto
 {

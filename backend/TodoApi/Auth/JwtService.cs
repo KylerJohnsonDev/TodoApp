@@ -2,9 +2,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
-using TodoApi.Models;
+using TodoApi.Auth;
 
-namespace TodoApi.Services;
+namespace TodoApi.Auth;
 
 public interface IJwtService
 {

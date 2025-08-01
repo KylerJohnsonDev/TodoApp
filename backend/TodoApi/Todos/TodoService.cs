@@ -1,9 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Data;
-using TodoApi.DTOs;
-using TodoApi.Models;
+using TodoApi.Todos;
 
-namespace TodoApi.Services;
+namespace TodoApi.Todos;
 
 public interface ITodoService
 {
