@@ -32,7 +32,7 @@ public class TodoService : ITodoService
             {
                 Id = t.Id,
                 Text = t.Text,
-                IsCompleted = t.IsCompleted,
+                Status = t.Status,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
                 CompletedAt = t.CompletedAt
@@ -50,7 +50,7 @@ public class TodoService : ITodoService
             {
                 Id = t.Id,
                 Text = t.Text,
-                IsCompleted = t.IsCompleted,
+                Status = t.Status,
                 CreatedAt = t.CreatedAt,
                 UpdatedAt = t.UpdatedAt,
                 CompletedAt = t.CompletedAt
@@ -77,7 +77,7 @@ public class TodoService : ITodoService
         {
             Id = todo.Id,
             Text = todo.Text,
-            IsCompleted = todo.IsCompleted,
+            Status = todo.Status,
             CreatedAt = todo.CreatedAt,
             UpdatedAt = todo.UpdatedAt,
             CompletedAt = todo.CompletedAt
@@ -95,10 +95,10 @@ public class TodoService : ITodoService
         if (!string.IsNullOrEmpty(updateTodoDto.Text))
             todo.Text = updateTodoDto.Text;
 
-        if (updateTodoDto.IsCompleted.HasValue)
+        if (updateTodoDto.Status.HasValue)
         {
-            todo.IsCompleted = updateTodoDto.IsCompleted.Value;
-            todo.CompletedAt = updateTodoDto.IsCompleted.Value ? DateTime.UtcNow : null;
+            todo.Status = updateTodoDto.Status.Value;
+            todo.CompletedAt = updateTodoDto.Status.Value == TodoStatus.Complete ? DateTime.UtcNow : null;
         }
 
         todo.UpdatedAt = DateTime.UtcNow;
@@ -109,7 +109,7 @@ public class TodoService : ITodoService
         {
             Id = todo.Id,
             Text = todo.Text,
-            IsCompleted = todo.IsCompleted,
+            Status = todo.Status,
             CreatedAt = todo.CreatedAt,
             UpdatedAt = todo.UpdatedAt,
             CompletedAt = todo.CompletedAt

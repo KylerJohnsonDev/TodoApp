@@ -51,8 +51,8 @@ public class TodoDbContext : DbContext
                 .IsRequired()
                 .HasMaxLength(500);
                 
-            entity.Property(e => e.IsCompleted)
-                .HasDefaultValue(false);
+            entity.Property(e => e.Status)
+                .HasDefaultValue(TodoStatus.Incomplete);
                 
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("datetime('now')");

@@ -4,6 +4,13 @@ using TodoApi.Auth;
 
 namespace TodoApi.Todos;
 
+public enum TodoStatus
+{
+    Incomplete,
+    InProgress,
+    Complete
+}
+
 public class Todo
 {
     public int Id { get; set; }
@@ -12,7 +19,7 @@ public class Todo
     [StringLength(500)]
     public string Text { get; set; } = string.Empty;
     
-    public bool IsCompleted { get; set; } = false;
+    public TodoStatus Status { get; set; } = TodoStatus.Incomplete;
     
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     
