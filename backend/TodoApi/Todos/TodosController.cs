@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TodoApi.Todos;
 
 namespace TodoApi.Todos;
@@ -22,6 +23,14 @@ public class TodosController : ControllerBase
         if (userIdClaim == null || !int.TryParse(userIdClaim, out int userId))
             throw new UnauthorizedAccessException("User ID not found in token");
         return userId;
+    }
+
+    private string GetCurrentUsername()
+    {
+        var usernameClaim = User.FindFirst(ClaimTypes.Name)?.Value;
+        if (string.IsNullOrEmpty(usernameClaim))
+            throw new UnauthorizedAccessException("Username not found in token");
+        return usernameClaim;
     }
 
     [HttpGet]
@@ -67,7 +76,8 @@ public class TodosController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var todo = await _todoService.CreateTodoAsync(createTodoDto, userId);
+            var username = GetCurrentUsername();
+            var todo = await _todoService.CreateTodoAsync(createTodoDto, userId, username);
             return CreatedAtAction(nameof(GetTodo), new { id = todo.Id }, todo);
         }
         catch (UnauthorizedAccessException)
@@ -85,7 +95,8 @@ public class TodosController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var todo = await _todoService.UpdateTodoAsync(id, updateTodoDto, userId);
+            var username = GetCurrentUsername();
+            var todo = await _todoService.UpdateTodoAsync(id, updateTodoDto, userId, username);
             
             if (todo == null)
                 return NotFound(new { message = "Todo not found" });
@@ -104,7 +115,8 @@ public class TodosController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var result = await _todoService.DeleteTodoAsync(id, userId);
+            var username = GetCurrentUsername();
+            var result = await _todoService.DeleteTodoAsync(id, userId, username);
             
             if (!result)
                 return NotFound(new { message = "Todo not found" });
@@ -126,7 +138,8 @@ public class TodosController : ControllerBase
         try
         {
             var userId = GetCurrentUserId();
-            var deletedCount = await _todoService.DeleteMultipleTodosAsync(deleteMultipleTodosDto.TodoIds, userId);
+            var username = GetCurrentUsername();
+            var deletedCount = await _todoService.DeleteMultipleTodosAsync(deleteMultipleTodosDto.TodoIds, userId, username);
             
             return Ok(new { 
                 message = $"Successfully deleted {deletedCount} todo(s)",

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using TodoApi.Data;
 using TodoApi.Auth;
 using TodoApi.Todos;
+using TodoApi.ActionLogs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,6 +47,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITodoService, TodoService>();
+builder.Services.AddScoped<IActionLogService, ActionLogService>();
 
 // Configure OpenAPI/Swagger
 builder.Services.AddEndpointsApiExplorer();

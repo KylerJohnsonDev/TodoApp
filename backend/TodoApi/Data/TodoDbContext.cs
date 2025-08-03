@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Auth;
 using TodoApi.Todos;
+using TodoApi.ActionLogs;
 
 namespace TodoApi.Data;
 
@@ -12,6 +13,7 @@ public class TodoDbContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Todo> Todos { get; set; }
+    public DbSet<ActionLog> ActionLogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +65,29 @@ public class TodoDbContext : DbContext
             // Configure relationship
             entity.HasOne(e => e.User)
                 .WithMany(u => u.Todos)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure ActionLog entity
+        modelBuilder.Entity<ActionLog>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            
+            entity.Property(e => e.Username)
+                .IsRequired()
+                .HasMaxLength(100);
+                
+            entity.Property(e => e.Action)
+                .IsRequired()
+                .HasMaxLength(500);
+                
+            entity.Property(e => e.Timestamp)
+                .HasDefaultValueSql("datetime('now')");
+
+            // Configure relationship
+            entity.HasOne(e => e.User)
+                .WithMany()
                 .HasForeignKey(e => e.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
         });
