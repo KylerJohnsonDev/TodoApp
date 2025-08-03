@@ -1,5 +1,11 @@
 {
   "plugins": {
-    "@tailwindcss/postcss": {}
+    "@tailwindcss/postcss": {
+      "content": [
+        "./src/app/**/*.{html,ts}",
+        "./src/**/*.{html,ts,css}",
+        "./node_modules/flowbite/**/*.js"
+      ]
+    }
   }
 }
