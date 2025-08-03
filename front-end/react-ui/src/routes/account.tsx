@@ -1,13 +1,13 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/account')({
-  component: Profile,
+  component: Account,
 })
 
-function Profile() {
+function Account() {
   return (
     <div className="p-2">
-      <h3>User Profile!</h3>
+      <h3>User Account!</h3>
     </div>
   )
 }
