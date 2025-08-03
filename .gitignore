@@ -25,3 +25,84 @@ backend/TodoApi/Thumbs.db
 
 # Database
 backend/TodoApi/todoapp.db
+
+
+########
+# Front end
+#######
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+front-end/angular-ui/dist
+front-end/angular-ui/tmp
+front-end/angular-ui/out-tsc
+front-end/angular-ui/bazel-out
+
+# Node
+front-end/angular-ui/node_modules
+front-end/angular-ui/npm-debug.log
+front-end/angular-ui/yarn-error.log
+
+# IDEs and editors
+front-end/angular-ui/.idea/
+front-end/angular-ui/.project
+front-end/angular-ui/.classpath
+front-end/angular-ui/.c9/
+front-end/angular-ui/*.launch
+front-end/angular-ui/.settings/
+front-end/angular-ui/*.sublime-workspace
+
+# Visual Studio Code
+front-end/angular-ui/.vscode/*
+front-end/angular-ui/.vscode/settings.json
+front-end/angular-ui/.vscode/tasks.json
+front-end/angular-ui/.vscode/launch.json
+front-end/angular-ui/.vscode/extensions.json
+front-end/angular-ui/.history/*
+
+# Miscellaneous
+front-end/angular-ui/.angular/cache
+front-end/angular-ui/.sass-cache/
+front-end/angular-ui/connect.lock
+front-end/angular-ui/coverage
+front-end/angular-ui/libpeerconnection.log
+front-end/angular-ui/testem.log
+front-end/angular-ui/typings
+
+# System files
+front-end/angular-ui/.DS_Store
+front-end/angular-ui/Thumbs.db
+
+front-end/angular-ui/node_modules
+front-end/angular-ui/npm-debug.log
+front-end/angular-ui/yarn-error.log
+
+# IDEs and editors
+front-end/angular-ui/.idea/
+front-end/angular-ui/.project
+front-end/angular-ui/.classpath
+front-end/angular-ui/.c9/
+front-end/angular-ui/*.launch
+front-end/angular-ui/.settings/
+front-end/angular-ui/*.sublime-workspace
+
+# Visual Studio Code
+front-end/angular-ui/.vscode/*
+!front-end/angular-ui/.vscode/settings.json
+!front-end/angular-ui/.vscode/tasks.json
+!front-end/angular-ui/.vscode/launch.json
+!front-end/angular-ui/.vscode/extensions.json
+front-end/angular-ui.history/*
+
+# Miscellaneous
+front-end/angular-ui/.angular/cache
+front-end/angular-ui/.sass-cache/
+front-end/angular-ui/connect.lock
+front-end/angular-ui/coverage
+front-end/angular-ui/libpeerconnection.log
+front-end/angular-ui/testem.log
+front-end/angular-ui/typings
+
+# System files
+front-end/angular-ui/.DS_Store
+front-end/angular-ui/Thumbs.db
