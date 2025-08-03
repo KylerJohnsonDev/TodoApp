@@ -64,7 +64,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset-password")]
-    public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    public IActionResult ResetPassword(ResetPasswordDto resetPasswordDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
