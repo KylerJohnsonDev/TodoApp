@@ -94,6 +94,8 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddOpenApi();
+
 var app = builder.Build();
 
 // Ensure database is created
@@ -108,6 +110,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapOpenApi();
 }
 
 app.UseHttpsRedirection();
