@@ -8,13 +8,19 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
+import type { TodoResponseDto } from '.././model';
+
 export const getGetApiTodosResponseMock = (): TodoResponseDto[] =>
   Array.from(
     { length: faker.number.int({ min: 1, max: 10 }) },
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     text: faker.helpers.arrayElement([
@@ -22,7 +28,11 @@ export const getGetApiTodosResponseMock = (): TodoResponseDto[] =>
       undefined,
     ]),
     status: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     createdAt: faker.helpers.arrayElement([
@@ -46,7 +56,7 @@ export const getPostApiTodosResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -54,7 +64,7 @@ export const getPostApiTodosResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
@@ -79,7 +89,7 @@ export const getGetApiTodosIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -87,7 +97,7 @@ export const getGetApiTodosIdResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
@@ -112,7 +122,7 @@ export const getPutApiTodosIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -120,7 +130,7 @@ export const getPutApiTodosIdResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
@@ -152,12 +162,14 @@ export const getGetApiTodosMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getGetApiTodosResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getGetApiTodosResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
@@ -173,12 +185,14 @@ export const getPostApiTodosMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getPostApiTodosResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getPostApiTodosResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
@@ -194,12 +208,14 @@ export const getGetApiTodosIdMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getGetApiTodosIdResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getGetApiTodosIdResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
@@ -215,12 +231,14 @@ export const getPutApiTodosIdMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getPutApiTodosIdResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getPutApiTodosIdResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };

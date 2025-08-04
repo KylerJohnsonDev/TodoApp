@@ -2,7 +2,6 @@
   "name": "react-ui",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,11 +11,14 @@
     "format:check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.9.0",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/react-query": "^5.84.1",
     "@tanstack/react-router": "^1.130.12",
     "@tanstack/react-router-devtools": "^1.130.13",
+    "axios": "^1.11.0",
     "flowbite-react": "^0.12.5",
+    "msw": "^2.10.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwindcss": "^4.1.11"

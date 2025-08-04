@@ -6,11 +6,18 @@ using TodoApi.Data;
 using TodoApi.Auth;
 using TodoApi.Todos;
 using TodoApi.ActionLogs;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    // Removing this to prevent text/plain content type from showing in OpenAPI document
+    // When text/plain is included, Orval can't generate import statements in msw mock files
+    // for the generated composite types.
+    options.OutputFormatters.RemoveType<StringOutputFormatter>();
+});
 
 // Configure Entity Framework with SQLite
 builder.Services.AddDbContext<TodoDbContext>(options =>
@@ -112,8 +119,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapOpenApi();
 }
+else
+{
+    app.UseHttpsRedirection();
+}
 
-app.UseHttpsRedirection();
 
 // Enable CORS
 app.UseCors("AllowAll");

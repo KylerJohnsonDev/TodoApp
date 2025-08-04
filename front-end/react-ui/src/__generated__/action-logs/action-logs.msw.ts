@@ -8,13 +8,19 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
+import type { ActionLogResponseDto } from '.././model';
+
 export const getGetApiActionLogsResponseMock = (): ActionLogResponseDto[] =>
   Array.from(
     { length: faker.number.int({ min: 1, max: 10 }) },
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     username: faker.helpers.arrayElement([
@@ -37,7 +43,11 @@ export const getGetApiActionLogsAllResponseMock = (): ActionLogResponseDto[] =>
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     username: faker.helpers.arrayElement([
@@ -65,12 +75,14 @@ export const getGetApiActionLogsMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getGetApiActionLogsResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getGetApiActionLogsResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
@@ -86,12 +98,14 @@ export const getGetApiActionLogsAllMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getGetApiActionLogsAllResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getGetApiActionLogsAllResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };

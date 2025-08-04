@@ -8,6 +8,8 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
+import type { AuthResponseDto } from '.././model';
+
 export const getPostApiAuthRegisterResponseMock = (
   overrideResponse: Partial<AuthResponseDto> = {},
 ): AuthResponseDto => ({
@@ -63,12 +65,14 @@ export const getPostApiAuthRegisterMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getPostApiAuthRegisterResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getPostApiAuthRegisterResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
@@ -84,12 +88,14 @@ export const getPostApiAuthLoginMockHandler = (
     await delay(1000);
 
     return new HttpResponse(
-      overrideResponse !== undefined
-        ? typeof overrideResponse === 'function'
-          ? await overrideResponse(info)
-          : overrideResponse
-        : getPostApiAuthLoginResponseMock(),
-      { status: 200, headers: { 'Content-Type': 'text/plain' } },
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getPostApiAuthLoginResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
     );
   });
 };
