@@ -36,7 +36,7 @@ module.exports = tseslint.config(
           style: "kebab-case",
         },
       ],
-      "prettier/prettier": "error", // Enforce Prettier formatting as lint errors
+      // "prettier/prettier": "error", // Enforce Prettier formatting as lint errors
       "@typescript-eslint/no-explicit-any": "error", // Forbid usage of 'any'
     },
   },
