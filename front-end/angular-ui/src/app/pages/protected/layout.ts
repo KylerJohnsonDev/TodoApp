@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Header } from '../../components/header';
 
 @Component({
   selector: 'app-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Header],
   template: `
-    <p>layout works!</p>
+    <app-header />
     <router-outlet></router-outlet>
   `,
   styles: ``,

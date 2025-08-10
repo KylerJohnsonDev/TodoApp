@@ -16,7 +16,11 @@ export const getGetApiActionLogsResponseMock = (): ActionLogResponseDto[] =>
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     username: faker.helpers.arrayElement([
@@ -39,7 +43,11 @@ export const getGetApiActionLogsAllResponseMock = (): ActionLogResponseDto[] =>
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     username: faker.helpers.arrayElement([

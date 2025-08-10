@@ -16,7 +16,11 @@ export const getGetApiTodosResponseMock = (): TodoResponseDto[] =>
     (_, i) => i + 1,
   ).map(() => ({
     id: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     text: faker.helpers.arrayElement([
@@ -24,7 +28,11 @@ export const getGetApiTodosResponseMock = (): TodoResponseDto[] =>
       undefined,
     ]),
     status: faker.helpers.arrayElement([
-      faker.number.int({ min: undefined, max: undefined }),
+      faker.number.int({
+        min: undefined,
+        max: undefined,
+        multipleOf: undefined,
+      }),
       undefined,
     ]),
     createdAt: faker.helpers.arrayElement([
@@ -48,7 +56,7 @@ export const getPostApiTodosResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -56,7 +64,7 @@ export const getPostApiTodosResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
@@ -81,7 +89,7 @@ export const getGetApiTodosIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -89,7 +97,7 @@ export const getGetApiTodosIdResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
@@ -114,7 +122,7 @@ export const getPutApiTodosIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -122,7 +130,7 @@ export const getPutApiTodosIdResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined }),
+    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
     undefined,
   ]),
   createdAt: faker.helpers.arrayElement([
