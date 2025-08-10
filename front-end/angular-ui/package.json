@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "pretty-quick": "pretty-quick --staged",
-    "lint": "ng lint --fix"
+    "lint": "ng lint --fix",
+    "generate:api": "orval --config orval.config.ts"
   },
   "prettier": {
     "overrides": [
@@ -53,6 +54,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "orval": "^7.11.2",
     "prettier": "^3.6.2",
     "typescript": "~5.8.2",
     "typescript-eslint": "8.34.1"
