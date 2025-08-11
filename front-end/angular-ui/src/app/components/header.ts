@@ -4,6 +4,7 @@ import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { BadgeModule } from 'primeng/badge';
 import { IconFieldModule } from 'primeng/iconfield';
+import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
 
 @Component({
@@ -14,9 +15,10 @@ import { MenubarModule } from 'primeng/menubar';
     BadgeModule,
     RouterModule,
     IconFieldModule,
+    MenuModule,
   ],
   template: `
-    <p-menubar [model]="items">
+    <p-menubar [model]="navItems">
       <ng-template #start>
         <a routerLink="/">
           <svg
@@ -29,6 +31,8 @@ import { MenubarModule } from 'primeng/menubar';
             enable-background="new 0 0 72 72"
             xml:space="preserve"
             stroke="#34d399"
+            width="32"
+            height="32"
           >
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g
@@ -78,7 +82,11 @@ import { MenubarModule } from 'primeng/menubar';
         </a>
       </ng-template>
       <ng-template #item let-item let-root="root">
-        <a pRipple class="flex items-center p-menubar-item-link">
+        <a
+          pRipple
+          class="flex items-center p-menubar-item-link"
+          [routerLink]="item.routerLink"
+        >
           <i class="{{ item.icon }}"></i>
           <span>{{ item.label }}</span>
           @if (item.shortcut) {
@@ -99,20 +107,25 @@ import { MenubarModule } from 'primeng/menubar';
         </a>
       </ng-template>
       <ng-template #end>
-        <div class="flex items-center gap-2">
+        <button class="flex items-center gap-2" (click)="menu.toggle($event)">
           <p-avatar
             image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
             shape="circle"
           />
-        </div>
+        </button>
+        <p-menu #menu [popup]="true" [model]="menuItems" />
       </ng-template>
     </p-menubar>
   `,
-  styles: ``,
+  styles: `
+    svg {
+      display: block;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  readonly items: MenuItem[] | undefined = [
+  readonly navItems: MenuItem[] | undefined = [
     {
       label: `To-Do's`,
       icon: 'pi pi-list-check',
@@ -121,7 +134,23 @@ export class Header {
     {
       label: 'Action Logs',
       icon: 'pi pi-list',
-      routerLink: ['/settings'],
+      routerLink: ['/action-logs'],
+    },
+  ];
+
+  readonly menuItems: MenuItem[] = [
+    {
+      label: 'Account',
+      icon: 'pi pi-user',
+      routerLink: ['/account'],
+    },
+    {
+      label: 'Sign Out',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        // Handle sign out logic here
+        console.log('Signing out...');
+      },
     },
   ];
 }

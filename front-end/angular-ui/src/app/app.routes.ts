@@ -1,7 +1,5 @@
 import { Routes } from '@angular/router';
-import ActionLogs from './pages/protected/action-logs';
 import Layout from './pages/protected/layout';
-import Todos from './pages/protected/todos';
 
 export const routes: Routes = [
   {
@@ -16,8 +14,15 @@ export const routes: Routes = [
     path: '',
     component: Layout,
     children: [
-      { path: 'todos', component: Todos },
-      { path: 'action-logs', component: ActionLogs },
+      { path: 'todos', loadComponent: () => import('./pages/protected/todos') },
+      {
+        path: 'action-logs',
+        loadComponent: () => import('./pages/protected/action-logs'),
+      },
+      {
+        path: 'account',
+        loadComponent: () => import('./pages/protected/account'),
+      },
       { path: '', redirectTo: 'todos', pathMatch: 'full' },
     ],
   },
