@@ -11,7 +11,6 @@ export * from './changePasswordDto';
 export * from './createTodoDto';
 export * from './deleteMultipleTodosDto';
 export * from './loginDto';
-export * from './nullableOfTodoStatus';
 export * from './registerDto';
 export * from './resetPasswordDto';
 export * from './todoResponseDto';

@@ -2,12 +2,14 @@ import { faker } from '@faker-js/faker';
 import { defineConfig } from 'orval';
 
 export default defineConfig({
-  todoApp: {
-    input: 'http://localhost:5000/swagger/v1/swagger.json',
+  todoAPI: {
+    input: {
+      target: 'http://localhost:5000/swagger/v1/swagger.json',
+    },
     output: {
       mode: 'tags-split',
-      target: 'src/app/__generated__/todo-api.ts',
-      schemas: 'src/app/__generated__/model',
+      target: 'src/app/__generated__/todoAPI',
+      schemas: 'src/app/__generated__/todoAPI/model',
       client: 'angular',
       // httpClient: 'axios', // Not used for Angular client
       mock: true,
