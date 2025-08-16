@@ -15,15 +15,15 @@ export default defineConfig({
         operations: {
           GetTodos: {
             mock: {
-              data: () => [
-                {
+              data: () => {
+                return Array.from({ length: 10 }, () => ({
                   id: faker.number.int({ min: 1, max: 100 }),
                   text: faker.lorem.sentence(),
                   createdAt: faker.date.past(),
                   status: faker.number.int({ min: 0, max: 2 }),
                   completedAt: undefined,
-                },
-              ],
+                }));
+              },
             },
           },
         },

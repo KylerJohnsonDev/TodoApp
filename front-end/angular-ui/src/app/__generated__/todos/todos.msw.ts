@@ -11,15 +11,15 @@ import { HttpResponse, delay, http } from 'msw';
 import type { TodoResponseDto } from '.././model';
 
 export const getGetTodosResponseMock = () =>
-  (() => [
-    {
+  (() => {
+    return Array.from({ length: 10 }, () => ({
       id: faker.number.int({ min: 1, max: 100 }),
       text: faker.lorem.sentence(),
       createdAt: faker.date.past(),
       status: faker.number.int({ min: 0, max: 2 }),
       completedAt: void 0,
-    },
-  ])();
+    }));
+  })();
 
 export const getCreateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
