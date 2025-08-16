@@ -1,4 +1,4 @@
-import { DatePipe, JsonPipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TodoResponseDto } from '../../__generated__/model';
@@ -7,7 +7,7 @@ import { TodosService } from '../../__generated__/todos/todos.service';
 
 @Component({
   selector: 'app-todo-table',
-  imports: [TableModule, DatePipe, JsonPipe],
+  imports: [TableModule, DatePipe],
   template: `
     <p-table
       [value]="todos"
@@ -36,7 +36,6 @@ import { TodosService } from '../../__generated__/todos/todos.service';
         </tr>
       </ng-template>
     </p-table>
-    <pre><code>{{ todos | json }}</code></pre>
   `,
   styles: ``,
   providers: [TodosService],

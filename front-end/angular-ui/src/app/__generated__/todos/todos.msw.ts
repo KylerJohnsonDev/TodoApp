@@ -10,46 +10,16 @@ import { HttpResponse, delay, http } from 'msw';
 
 import type { TodoResponseDto } from '.././model';
 
-export const getGetTodosResponseMock = (): TodoResponseDto[] =>
-  Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
-    (_, i) => i + 1,
-  ).map(() => ({
-    id: faker.helpers.arrayElement([
-      faker.number.int({
-        min: undefined,
-        max: undefined,
-        multipleOf: undefined,
-      }),
-      undefined,
-    ]),
-    text: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        null,
-      ]),
-      undefined,
-    ]),
-    status: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([0, 1, 2] as const),
-      undefined,
-    ]),
-    createdAt: faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
-      undefined,
-    ]),
-    updatedAt: faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
-      undefined,
-    ]),
-    completedAt: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        `${faker.date.past().toISOString().split('.')[0]}Z`,
-        null,
-      ]),
-      undefined,
-    ]),
-  }));
+export const getGetTodosResponseMock = () =>
+  (() => [
+    {
+      id: faker.number.int({ min: 1, max: 100 }),
+      text: faker.lorem.sentence(),
+      createdAt: faker.date.past(),
+      status: faker.number.int({ min: 0, max: 2 }),
+      completedAt: void 0,
+    },
+  ])();
 
 export const getCreateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
