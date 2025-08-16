@@ -7,6 +7,7 @@ using TodoApi.Auth;
 using TodoApi.Todos;
 using TodoApi.ActionLogs;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -60,8 +61,8 @@ builder.Services.AddScoped<IActionLogService, ActionLogService>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new() { Title = "TodoApi", Version = "v1" });
-    
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "TodoApi", Version = "v1" });
+    c.EnableAnnotations();
     // Add JWT Authentication to Swagger
     c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
@@ -72,7 +73,7 @@ builder.Services.AddSwaggerGen(c =>
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
         Description = "Enter 'Bearer' [space] and then your valid token in the text input below.\r\n\r\nExample: \"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\""
     });
-    
+
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
         {
@@ -117,7 +118,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.MapOpenApi();
+    // app.MapOpenApi();
 }
 else
 {

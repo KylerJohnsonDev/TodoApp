@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Swashbuckle.AspNetCore.Annotations;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using TodoApi.Todos;
@@ -34,6 +35,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpGet]
+    [SwaggerOperation(OperationId = "GetTodos")]
     public async Task<ActionResult<IEnumerable<TodoResponseDto>>> GetTodos()
     {
         try
@@ -49,16 +51,18 @@ public class TodosController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [SwaggerOperation(OperationId = "GetTodoById")]
+
     public async Task<ActionResult<TodoResponseDto>> GetTodo(int id)
     {
         try
         {
             var userId = GetCurrentUserId();
             var todo = await _todoService.GetTodoByIdAsync(id, userId);
-            
+
             if (todo == null)
                 return NotFound(new { message = "Todo not found" });
-                
+
             return Ok(todo);
         }
         catch (UnauthorizedAccessException)
@@ -68,6 +72,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpPost]
+    [SwaggerOperation(OperationId = "CreateTodo")]
     public async Task<ActionResult<TodoResponseDto>> CreateTodo(CreateTodoDto createTodoDto)
     {
         if (!ModelState.IsValid)
@@ -87,6 +92,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    [SwaggerOperation(OperationId = "UpdateTodo")]
     public async Task<ActionResult<TodoResponseDto>> UpdateTodo(int id, UpdateTodoDto updateTodoDto)
     {
         if (!ModelState.IsValid)
@@ -97,10 +103,10 @@ public class TodosController : ControllerBase
             var userId = GetCurrentUserId();
             var username = GetCurrentUsername();
             var todo = await _todoService.UpdateTodoAsync(id, updateTodoDto, userId, username);
-            
+
             if (todo == null)
                 return NotFound(new { message = "Todo not found" });
-                
+
             return Ok(todo);
         }
         catch (UnauthorizedAccessException)
@@ -110,6 +116,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [SwaggerOperation(OperationId = "DeleteTodo")]
     public async Task<IActionResult> DeleteTodo(int id)
     {
         try
@@ -117,10 +124,10 @@ public class TodosController : ControllerBase
             var userId = GetCurrentUserId();
             var username = GetCurrentUsername();
             var result = await _todoService.DeleteTodoAsync(id, userId, username);
-            
+
             if (!result)
                 return NotFound(new { message = "Todo not found" });
-                
+
             return NoContent();
         }
         catch (UnauthorizedAccessException)
@@ -130,6 +137,7 @@ public class TodosController : ControllerBase
     }
 
     [HttpDelete("bulk")]
+    [SwaggerOperation(OperationId = "DeleteMultipleTodos")]
     public async Task<IActionResult> DeleteMultipleTodos(DeleteMultipleTodosDto deleteMultipleTodosDto)
     {
         if (!ModelState.IsValid)
@@ -140,8 +148,9 @@ public class TodosController : ControllerBase
             var userId = GetCurrentUserId();
             var username = GetCurrentUsername();
             var deletedCount = await _todoService.DeleteMultipleTodosAsync(deleteMultipleTodosDto.TodoIds, userId, username);
-            
-            return Ok(new { 
+
+            return Ok(new
+            {
                 message = $"Successfully deleted {deletedCount} todo(s)",
                 deletedCount = deletedCount,
                 requestedCount = deleteMultipleTodosDto.TodoIds.Length

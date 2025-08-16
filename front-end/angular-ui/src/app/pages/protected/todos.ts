@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TodoTable } from '../../components/todos/todo-table';
 
 @Component({
   selector: 'app-todos',
-  imports: [],
-  template: ` <p>todos works!</p> `,
+  imports: [TodoTable],
+  template: ` <app-todo-table /> `,
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
