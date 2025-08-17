@@ -17,7 +17,7 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import type { ActionLogResponseDto } from '.././model';
+import type { ActionLogResponseDto } from '../todoApi.schemas';
 
 interface HttpClientOptions {
   headers?: HttpHeaders | Record<string, string | string[]>;

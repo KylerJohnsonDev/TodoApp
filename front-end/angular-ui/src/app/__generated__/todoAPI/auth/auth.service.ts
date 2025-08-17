@@ -23,7 +23,7 @@ import type {
   LoginDto,
   RegisterDto,
   ResetPasswordDto,
-} from '.././model';
+} from '../todoApi.schemas';
 
 interface HttpClientOptions {
   headers?: HttpHeaders | Record<string, string | string[]>;

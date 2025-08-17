@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
-import type { ActionLogResponseDto } from '.././model';
+import type { ActionLogResponseDto } from '../todoApi.schemas';
 
 export const getGetApiActionLogsResponseMock = (): ActionLogResponseDto[] =>
   Array.from(

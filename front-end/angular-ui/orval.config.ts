@@ -1,3 +1,5 @@
+// orval.config.ts
+
 import { faker } from '@faker-js/faker';
 import { defineConfig } from 'orval';
 
@@ -9,9 +11,8 @@ export default defineConfig({
     output: {
       mode: 'tags-split',
       target: 'src/app/__generated__/todoAPI',
-      schemas: 'src/app/__generated__/todoAPI/model',
+      namingConvention: 'kebab-case',
       client: 'angular',
-      // httpClient: 'axios', // Not used for Angular client
       mock: true,
       override: {
         operations: {

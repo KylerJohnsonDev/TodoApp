@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
-import type { AuthResponseDto } from '.././model';
+import type { AuthResponseDto } from '../todoApi.schemas';
 
 export const getPostApiAuthRegisterResponseMock = (
   overrideResponse: Partial<AuthResponseDto> = {},

@@ -1,13 +1,13 @@
 import { defineConfig } from 'orval';
 
-
 export default defineConfig({
-  todoApp: {
+  todoAPI: {
     input: 'http://localhost:5000/openapi/v1.json',
     output: {
+      clean: true,
       mode: 'tags-split',
-      target: 'src/__generated__/todo-api.ts',
-      schemas: 'src/__generated__/model',
+      target: 'src/__generated__/todoAPI',
+      // schemas: 'src/__generated__/model',
       client: 'react-query',
       httpClient: 'axios',
       mock: true,

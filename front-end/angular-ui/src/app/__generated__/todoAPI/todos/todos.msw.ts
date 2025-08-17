@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
-import type { TodoResponseDto } from '.././model';
+import type { TodoResponseDto } from '../todoApi.schemas';
 
 export const getGetTodosResponseMock = () =>
   (() => {
