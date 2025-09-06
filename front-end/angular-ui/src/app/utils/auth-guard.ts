@@ -1,11 +1,32 @@
-import { CanActivateFn } from '@angular/router';
+import { inject } from '@angular/core';
+import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
+import { authStore } from './auth-store';
 
 export const isAuthenticated: CanActivateFn = (route, state) => {
-  console.log('Auth guard called with route:', route);
-  console.log('Auth guard called with state:', state);
-  console.log('Route params:', route.params);
-  console.log('Route query params:', route.queryParams);
-  console.log('Current URL:', state.url);
+  const _authStore = inject(authStore);
+  const user = _authStore.user();
+  const token = sessionStorage.getItem('authToken');
+  if (!user || !token) {
+    console.log({ user, token });
+    console.log(route, state);
+    localStorage.setItem('redirectAfterLogin', state.url);
+    console.log(
+      `Not authenticated, setting redirectAfterLogin in localStorage: ${state.url}`,
+    );
+    const urlTree = createUrlTreeFromSnapshot(route, ['/login']);
+    return urlTree;
+  }
+
+  if (localStorage.getItem('redirectAfterLogin')) {
+    console.log(
+      `Found redirectAfterLogin in localStorage: ${localStorage.getItem('redirectAfterLogin')}`,
+    );
+    const redirectUrl = localStorage.getItem('redirectAfterLogin')!;
+    localStorage.removeItem('redirectAfterLogin');
+    const urlTree = createUrlTreeFromSnapshot(route, [redirectUrl]);
+    console.log(`Redirecting to ${redirectUrl} by urlTree:`, urlTree);
+    return urlTree;
+  }
 
   return true;
 };

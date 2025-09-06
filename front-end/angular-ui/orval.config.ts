@@ -7,12 +7,18 @@ export default defineConfig({
   todoAPI: {
     input: {
       target: 'http://localhost:5000/swagger/v1/swagger.json',
+      validation: false,
     },
     output: {
       mode: 'tags-split',
       target: 'src/app/__generated__/todoAPI',
       namingConvention: 'kebab-case',
       client: 'angular',
+      docs: {
+        out: './docs-markdown',
+        disableSources: true,
+        theme: '',
+      },
       mock: true,
       override: {
         operations: {

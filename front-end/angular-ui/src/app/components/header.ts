@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
@@ -6,6 +6,7 @@ import { BadgeModule } from 'primeng/badge';
 import { IconFieldModule } from 'primeng/iconfield';
 import { MenuModule } from 'primeng/menu';
 import { MenubarModule } from 'primeng/menubar';
+import { authStore } from '../utils/auth-store';
 
 @Component({
   selector: 'app-header',
@@ -148,9 +149,10 @@ export class Header {
       label: 'Sign Out',
       icon: 'pi pi-sign-out',
       command: () => {
-        // Handle sign out logic here
-        console.log('Signing out...');
+        this._authStore.logout();
       },
     },
   ];
+
+  readonly _authStore = inject(authStore);
 }

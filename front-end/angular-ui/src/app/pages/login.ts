@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -7,6 +7,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { LoginDto } from '../__generated__/todoAPI/todoApi.schemas';
+import { authStore } from '../utils/auth-store';
 
 @Component({
   selector: 'app-login',
@@ -70,12 +72,13 @@ export default class Login {
   userEmail = '';
   password = '';
 
+  readonly _authStore = inject(authStore);
+
   login(): void {
-    const data = {
-      email: this.userEmail,
+    const data: LoginDto = {
+      username_or_email: this.userEmail,
       password: this.password,
     };
-    // Logic to handle login goes here
-    console.log('User logged in:', data);
+    this._authStore.login(data);
   }
 }

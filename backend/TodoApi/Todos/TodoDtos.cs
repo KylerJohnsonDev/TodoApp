@@ -2,18 +2,25 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TodoApi.Todos;
 
+
+using System.Text.Json.Serialization;
+
 public class CreateTodoDto
 {
     [Required]
     [StringLength(500, MinimumLength = 1)]
+    [JsonPropertyName("text")]
     public string Text { get; set; } = string.Empty;
 }
 
 public class UpdateTodoDto
 {
     [StringLength(500, MinimumLength = 1)]
+    [JsonPropertyName("text")]
     public string? Text { get; set; }
-    
+
+    [Range(0, 2)]
+    [JsonPropertyName("status")]
     public TodoStatus? Status { get; set; }
 }
 
@@ -21,15 +28,30 @@ public class DeleteMultipleTodosDto
 {
     [Required]
     [MinLength(1, ErrorMessage = "At least one todo ID must be provided")]
+    [JsonPropertyName("todo_ids")]
+    [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue, ErrorMessage = "Each todo ID must be a non-negative integer")]
     public int[] TodoIds { get; set; } = Array.Empty<int>();
 }
 
 public class TodoResponseDto
 {
+    [Range(0, int.MaxValue)]
+    [JsonPropertyName("id")]
     public int Id { get; set; }
+
+    [JsonPropertyName("text")]
     public string Text { get; set; } = string.Empty;
+
+    [Range(0, 2)]
+    [JsonPropertyName("status")]
     public TodoStatus Status { get; set; }
+
+    [JsonPropertyName("created_at")]
     public DateTime CreatedAt { get; set; }
+
+    [JsonPropertyName("updated_at")]
     public DateTime UpdatedAt { get; set; }
+
+    [JsonPropertyName("completed_at")]
     public DateTime? CompletedAt { get; set; }
 }

@@ -7,7 +7,7 @@ using TodoApi.Todos;
 namespace TodoApi.Todos;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/todos")]
 [Authorize]
 public class TodosController : ControllerBase
 {
@@ -36,13 +36,13 @@ public class TodosController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(OperationId = "GetTodos")]
-    public async Task<ActionResult<IEnumerable<TodoResponseDto>>> GetTodos()
+    public async Task<ActionResult<object>> GetTodos()
     {
         try
         {
             var userId = GetCurrentUserId();
             var todos = await _todoService.GetTodosAsync(userId);
-            return Ok(todos);
+            return Ok(new { items = todos });
         }
         catch (UnauthorizedAccessException)
         {
@@ -53,7 +53,7 @@ public class TodosController : ControllerBase
     [HttpGet("{id}")]
     [SwaggerOperation(OperationId = "GetTodoById")]
 
-    public async Task<ActionResult<TodoResponseDto>> GetTodo(int id)
+    public async Task<ActionResult<TodoResponseDto>> GetTodo([FromRoute] int id)
     {
         try
         {
@@ -93,7 +93,7 @@ public class TodosController : ControllerBase
 
     [HttpPut("{id}")]
     [SwaggerOperation(OperationId = "UpdateTodo")]
-    public async Task<ActionResult<TodoResponseDto>> UpdateTodo(int id, UpdateTodoDto updateTodoDto)
+    public async Task<ActionResult<TodoResponseDto>> UpdateTodo([FromRoute] int id, UpdateTodoDto updateTodoDto)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -117,7 +117,7 @@ public class TodosController : ControllerBase
 
     [HttpDelete("{id}")]
     [SwaggerOperation(OperationId = "DeleteTodo")]
-    public async Task<IActionResult> DeleteTodo(int id)
+    public async Task<IActionResult> DeleteTodo([FromRoute] int id)
     {
         try
         {

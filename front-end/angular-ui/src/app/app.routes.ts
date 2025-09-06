@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import Layout from './pages/protected/layout';
+import { isAuthenticated } from './utils/auth-guard';
 
 export const routes: Routes = [
   {
@@ -13,6 +14,7 @@ export const routes: Routes = [
   {
     path: '',
     component: Layout,
+    canActivateChild: [isAuthenticated],
     children: [
       { path: 'todos', loadComponent: () => import('./pages/protected/todos') },
       {

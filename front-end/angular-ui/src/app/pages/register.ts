@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -7,6 +7,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
+import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
+import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
 
 @Component({
   selector: 'app-register',
@@ -27,22 +29,11 @@ import { PasswordModule } from 'primeng/password';
       <div class="my-4">
         <p-iconfield class="mb-4">
           <input
-            id="firstName"
+            id="username"
             class="w-full"
             pInputText
-            [(ngModel)]="firstName"
-            placeholder="First Name"
-            pSize="large"
-          />
-          <p-inputicon class="pi pi-user" />
-        </p-iconfield>
-        <p-iconfield class="mb-4">
-          <input
-            id="lastName"
-            class="w-full"
-            pInputText
-            [(ngModel)]="lastName"
-            placeholder="Last Name"
+            [(ngModel)]="username"
+            placeholder="Username"
             pSize="large"
           />
           <p-inputicon class="pi pi-user" />
@@ -103,18 +94,19 @@ import { PasswordModule } from 'primeng/password';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Register {
-  firstName = '';
-  lastName = '';
+  username = '';
   userEmail = '';
   password = '';
   confirmPassword = '';
 
+  readonly authService = inject(AuthService);
+
   createAccount() {
-    const data = {
-      firstName: this.firstName,
-      lastName: this.lastName,
+    const data: RegisterDto = {
+      username: this.username,
       email: this.userEmail,
       password: this.password,
+      confirm_password: this.confirmPassword,
     };
     // Logic to handle account creation goes here
     console.log('Account created:', data);

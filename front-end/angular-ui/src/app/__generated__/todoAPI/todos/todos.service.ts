@@ -50,19 +50,19 @@ interface HttpClientOptions {
 @Injectable({ providedIn: 'root' })
 export class TodosService {
   private readonly http = inject(HttpClient);
-  getTodos<TData = TodoResponseDto[]>(
+  getTodos<TData = null>(
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getTodos<TData = TodoResponseDto[]>(
+  getTodos<TData = null>(
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getTodos<TData = TodoResponseDto[]>(
+  getTodos<TData = null>(
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getTodos<TData = TodoResponseDto[]>(
+  getTodos<TData = null>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/Todos`, options);
+    return this.http.get<TData>(`/api/todos`, options);
   }
   createTodo<TData = TodoResponseDto>(
     createTodoDto: CreateTodoDto,
@@ -80,7 +80,7 @@ export class TodosService {
     createTodoDto: CreateTodoDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.post<TData>(`/api/Todos`, createTodoDto, options);
+    return this.http.post<TData>(`/api/todos`, createTodoDto, options);
   }
   getTodoById<TData = TodoResponseDto>(
     id: number,
@@ -98,7 +98,7 @@ export class TodosService {
     id: number,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/Todos/${id}`, options);
+    return this.http.get<TData>(`/api/todos/${id}`, options);
   }
   updateTodo<TData = TodoResponseDto>(
     id: number,
@@ -120,7 +120,7 @@ export class TodosService {
     updateTodoDto: UpdateTodoDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.put<TData>(`/api/Todos/${id}`, updateTodoDto, options);
+    return this.http.put<TData>(`/api/todos/${id}`, updateTodoDto, options);
   }
   deleteTodo<TData = null>(
     id: number,
@@ -138,7 +138,7 @@ export class TodosService {
     id: number,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.delete<TData>(`/api/Todos/${id}`, options);
+    return this.http.delete<TData>(`/api/todos/${id}`, options);
   }
   deleteMultipleTodos<TData = null>(
     deleteMultipleTodosDto: DeleteMultipleTodosDto,
@@ -156,14 +156,14 @@ export class TodosService {
     deleteMultipleTodosDto: DeleteMultipleTodosDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.delete<TData>(`/api/Todos/bulk`, {
+    return this.http.delete<TData>(`/api/todos/bulk`, {
       body: deleteMultipleTodosDto,
       ...options,
     });
   }
 }
 
-export type GetTodosClientResult = NonNullable<TodoResponseDto[]>;
+export type GetTodosClientResult = never;
 export type CreateTodoClientResult = NonNullable<TodoResponseDto>;
 export type GetTodoByIdClientResult = NonNullable<TodoResponseDto>;
 export type UpdateTodoClientResult = NonNullable<TodoResponseDto>;

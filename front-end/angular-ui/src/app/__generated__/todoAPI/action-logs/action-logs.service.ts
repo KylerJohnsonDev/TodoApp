@@ -17,8 +17,6 @@ import { Injectable, inject } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
-import type { ActionLogResponseDto } from '../todoApi.schemas';
-
 interface HttpClientOptions {
   headers?: HttpHeaders | Record<string, string | string[]>;
   context?: HttpContext;
@@ -45,37 +43,35 @@ interface HttpClientOptions {
 @Injectable({ providedIn: 'root' })
 export class ActionLogsService {
   private readonly http = inject(HttpClient);
-  getApiActionLogs<TData = ActionLogResponseDto[]>(
+  getApiActionLogs<TData = null>(
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getApiActionLogs<TData = ActionLogResponseDto[]>(
+  getApiActionLogs<TData = null>(
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getApiActionLogs<TData = ActionLogResponseDto[]>(
+  getApiActionLogs<TData = null>(
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getApiActionLogs<TData = ActionLogResponseDto[]>(
+  getApiActionLogs<TData = null>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/ActionLogs`, options);
+    return this.http.get<TData>(`/api/action_logs`, options);
   }
-  getApiActionLogsAll<TData = ActionLogResponseDto[]>(
+  getApiActionLogsAll<TData = null>(
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getApiActionLogsAll<TData = ActionLogResponseDto[]>(
+  getApiActionLogsAll<TData = null>(
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getApiActionLogsAll<TData = ActionLogResponseDto[]>(
+  getApiActionLogsAll<TData = null>(
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getApiActionLogsAll<TData = ActionLogResponseDto[]>(
+  getApiActionLogsAll<TData = null>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/ActionLogs/all`, options);
+    return this.http.get<TData>(`/api/action_logs/all`, options);
   }
 }
 
-export type GetApiActionLogsClientResult = NonNullable<ActionLogResponseDto[]>;
-export type GetApiActionLogsAllClientResult = NonNullable<
-  ActionLogResponseDto[]
->;
+export type GetApiActionLogsClientResult = never;
+export type GetApiActionLogsAllClientResult = never;

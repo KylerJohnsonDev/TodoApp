@@ -11,6 +11,7 @@ public interface IAuthService
     Task<AuthResponseDto?> LoginAsync(LoginDto loginDto);
     Task<bool> ChangePasswordAsync(int userId, ChangePasswordDto changePasswordDto);
     Task<bool> UserExistsAsync(string username, string email);
+    Task<UserDto?> GetUserByIdAsync(int userId);
 }
 
 public class AuthService : IAuthService
@@ -47,7 +48,7 @@ public class AuthService : IAuthService
 
         // Generate token
         var token = _jwtService.GenerateToken(user);
-        
+
         return new AuthResponseDto
         {
             Token = token,
@@ -93,6 +94,22 @@ public class AuthService : IAuthService
 
         await _context.SaveChangesAsync();
         return true;
+    }
+
+    public async Task<UserDto?> GetUserByIdAsync(int userId)
+    {
+        var user = await _context.Users.FindAsync(userId);
+        if (user == null)
+            return null;
+
+        return new UserDto
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email,
+            CreatedAt = user.CreatedAt,
+            UpdatedAt = user.UpdatedAt
+        };
     }
 
     public async Task<bool> UserExistsAsync(string username, string email)

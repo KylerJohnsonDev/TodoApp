@@ -4,15 +4,6 @@
  * TodoApi
  * OpenAPI spec version: v1
  */
-export interface ActionLogResponseDto {
-  id?: number;
-  /** @nullable */
-  username?: string | null;
-  timestamp?: string;
-  /** @nullable */
-  action?: string | null;
-}
-
 export interface AuthResponseDto {
   /** @nullable */
   token?: string | null;
@@ -25,14 +16,14 @@ export interface AuthResponseDto {
 
 export interface ChangePasswordDto {
   /** @minLength 1 */
-  currentPassword: string;
+  current_password: string;
   /**
    * @minLength 6
    * @maxLength 100
    */
-  newPassword: string;
+  new_password: string;
   /** @minLength 1 */
-  confirmNewPassword: string;
+  confirm_new_password: string;
 }
 
 export interface CreateTodoDto {
@@ -44,13 +35,17 @@ export interface CreateTodoDto {
 }
 
 export interface DeleteMultipleTodosDto {
-  /** @minItems 1 */
-  todoIds: number[];
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   * @minItems 1
+   */
+  todo_ids: number[];
 }
 
 export interface LoginDto {
   /** @minLength 1 */
-  usernameOrEmail: string;
+  username_or_email: string;
   /** @minLength 1 */
   password: string;
 }
@@ -72,7 +67,7 @@ export interface RegisterDto {
    */
   password: string;
   /** @minLength 1 */
-  confirmPassword: string;
+  confirm_password: string;
 }
 
 export interface ResetPasswordDto {
@@ -81,14 +76,18 @@ export interface ResetPasswordDto {
 }
 
 export interface TodoResponseDto {
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
   id?: number;
   /** @nullable */
   text?: string | null;
   status?: TodoStatus;
-  createdAt?: string;
-  updatedAt?: string;
+  created_at?: string;
+  updated_at?: string;
   /** @nullable */
-  completedAt?: string | null;
+  completed_at?: string | null;
 }
 
 export type TodoStatus = (typeof TodoStatus)[keyof typeof TodoStatus];
@@ -108,4 +107,14 @@ export interface UpdateTodoDto {
    */
   text?: string | null;
   status?: TodoStatus;
+}
+
+export interface UserDto {
+  id?: number;
+  /** @nullable */
+  username?: string | null;
+  /** @nullable */
+  email?: string | null;
+  created_at?: string;
+  updated_at?: string;
 }

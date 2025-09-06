@@ -23,6 +23,7 @@ import type {
   LoginDto,
   RegisterDto,
   ResetPasswordDto,
+  UserDto,
 } from '../todoApi.schemas';
 
 interface HttpClientOptions {
@@ -67,7 +68,7 @@ export class AuthService {
     registerDto: RegisterDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.post<TData>(`/api/Auth/register`, registerDto, options);
+    return this.http.post<TData>(`/api/auth/register`, registerDto, options);
   }
   postApiAuthLogin<TData = AuthResponseDto>(
     loginDto: LoginDto,
@@ -85,7 +86,7 @@ export class AuthService {
     loginDto: LoginDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.post<TData>(`/api/Auth/login`, loginDto, options);
+    return this.http.post<TData>(`/api/auth/login`, loginDto, options);
   }
   postApiAuthChangePassword<TData = null>(
     changePasswordDto: ChangePasswordDto,
@@ -104,7 +105,7 @@ export class AuthService {
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.post<TData>(
-      `/api/Auth/change-password`,
+      `/api/auth/change_password`,
       changePasswordDto,
       options,
     );
@@ -126,7 +127,7 @@ export class AuthService {
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.post<TData>(
-      `/api/Auth/reset-password`,
+      `/api/auth/reset_password`,
       resetPasswordDto,
       options,
     );
@@ -143,21 +144,21 @@ export class AuthService {
   postApiAuthLogout<TData = null>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.post<TData>(`/api/Auth/logout`, undefined, options);
+    return this.http.post<TData>(`/api/auth/logout`, undefined, options);
   }
-  getApiAuthProfile<TData = null>(
+  getApiAuthUser<TData = UserDto>(
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getApiAuthProfile<TData = null>(
+  getApiAuthUser<TData = UserDto>(
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getApiAuthProfile<TData = null>(
+  getApiAuthUser<TData = UserDto>(
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getApiAuthProfile<TData = null>(
+  getApiAuthUser<TData = UserDto>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/Auth/profile`, options);
+    return this.http.get<TData>(`/api/auth/user`, options);
   }
 }
 
@@ -166,4 +167,4 @@ export type PostApiAuthLoginClientResult = NonNullable<AuthResponseDto>;
 export type PostApiAuthChangePasswordClientResult = never;
 export type PostApiAuthResetPasswordClientResult = never;
 export type PostApiAuthLogoutClientResult = never;
-export type GetApiAuthProfileClientResult = never;
+export type GetApiAuthUserClientResult = NonNullable<UserDto>;

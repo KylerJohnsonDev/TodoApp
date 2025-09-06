@@ -6,7 +6,7 @@ using TodoApi.Auth;
 namespace TodoApi.Auth;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
     private readonly IAuthService _authService;
@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
 
         var result = await _authService.RegisterAsync(registerDto);
-        
+
         if (result == null)
             return BadRequest(new { message = "Username or email already exists" });
 
@@ -37,14 +37,14 @@ public class AuthController : ControllerBase
             return BadRequest(ModelState);
 
         var result = await _authService.LoginAsync(loginDto);
-        
+
         if (result == null)
             return Unauthorized(new { message = "Invalid username/email or password" });
 
         return Ok(result);
     }
 
-    [HttpPost("change-password")]
+    [HttpPost("change_password")]
     [Authorize]
     public async Task<IActionResult> ChangePassword(ChangePasswordDto changePasswordDto)
     {
@@ -56,14 +56,14 @@ public class AuthController : ControllerBase
             return Unauthorized();
 
         var result = await _authService.ChangePasswordAsync(userId, changePasswordDto);
-        
+
         if (!result)
             return BadRequest(new { message = "Current password is incorrect" });
 
         return Ok(new { message = "Password changed successfully" });
     }
 
-    [HttpPost("reset-password")]
+    [HttpPost("reset_password")]
     public IActionResult ResetPassword(ResetPasswordDto resetPasswordDto)
     {
         if (!ModelState.IsValid)
@@ -80,26 +80,29 @@ public class AuthController : ControllerBase
     {
         // With JWT tokens, logout is typically handled client-side by discarding the token
         // Here we can log the logout event, invalidate refresh tokens, etc.
-        
+
         var username = User.FindFirst(ClaimTypes.Name)?.Value;
         var userId = User.FindFirst("userId")?.Value;
-        
+
         // TODO: In a production app, you might want to:
         // 1. Add the token to a blacklist/revocation list
         // 2. Log the logout event
         // 3. Invalidate any refresh tokens
-        
+
         return Ok(new { message = "Successfully logged out", username });
     }
 
-    [HttpGet("profile")]
+    [HttpGet("user")]
     [Authorize]
-    public IActionResult GetProfile()
+    public async Task<ActionResult<UserDto>> GetUser()
     {
-        var username = User.FindFirst(ClaimTypes.Name)?.Value;
-        var email = User.FindFirst(ClaimTypes.Email)?.Value;
+        // var username = User.FindFirst(ClaimTypes.Name)?.Value;
+        // var email = User.FindFirst(ClaimTypes.Email)?.Value;
         var userId = User.FindFirst("userId")?.Value;
+        var user = await _authService.GetUserByIdAsync(int.Parse(userId!));
+        if (user == null)
+            return NotFound();
 
-        return Ok(new { username, email, userId });
+        return Ok(user);
     }
 }

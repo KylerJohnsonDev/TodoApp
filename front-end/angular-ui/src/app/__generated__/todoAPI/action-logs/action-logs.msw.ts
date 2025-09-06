@@ -4,121 +4,37 @@
  * TodoApi
  * OpenAPI spec version: v1
  */
-import { faker } from '@faker-js/faker';
-
 import { HttpResponse, delay, http } from 'msw';
-
-import type { ActionLogResponseDto } from '../todoApi.schemas';
-
-export const getGetApiActionLogsResponseMock = (): ActionLogResponseDto[] =>
-  Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
-    (_, i) => i + 1,
-  ).map(() => ({
-    id: faker.helpers.arrayElement([
-      faker.number.int({
-        min: undefined,
-        max: undefined,
-        multipleOf: undefined,
-      }),
-      undefined,
-    ]),
-    username: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        null,
-      ]),
-      undefined,
-    ]),
-    timestamp: faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
-      undefined,
-    ]),
-    action: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        null,
-      ]),
-      undefined,
-    ]),
-  }));
-
-export const getGetApiActionLogsAllResponseMock = (): ActionLogResponseDto[] =>
-  Array.from(
-    { length: faker.number.int({ min: 1, max: 10 }) },
-    (_, i) => i + 1,
-  ).map(() => ({
-    id: faker.helpers.arrayElement([
-      faker.number.int({
-        min: undefined,
-        max: undefined,
-        multipleOf: undefined,
-      }),
-      undefined,
-    ]),
-    username: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        null,
-      ]),
-      undefined,
-    ]),
-    timestamp: faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
-      undefined,
-    ]),
-    action: faker.helpers.arrayElement([
-      faker.helpers.arrayElement([
-        faker.string.alpha({ length: { min: 10, max: 20 } }),
-        null,
-      ]),
-      undefined,
-    ]),
-  }));
 
 export const getGetApiActionLogsMockHandler = (
   overrideResponse?:
-    | ActionLogResponseDto[]
+    | null
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<ActionLogResponseDto[]> | ActionLogResponseDto[]),
+      ) => Promise<null> | null),
 ) => {
-  return http.get('*/api/ActionLogs', async (info) => {
+  return http.get('*/api/action_logs', async (info) => {
     await delay(1000);
-
-    return new HttpResponse(
-      JSON.stringify(
-        overrideResponse !== undefined
-          ? typeof overrideResponse === 'function'
-            ? await overrideResponse(info)
-            : overrideResponse
-          : getGetApiActionLogsResponseMock(),
-      ),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    if (typeof overrideResponse === 'function') {
+      await overrideResponse(info);
+    }
+    return new HttpResponse(null, { status: 200 });
   });
 };
 
 export const getGetApiActionLogsAllMockHandler = (
   overrideResponse?:
-    | ActionLogResponseDto[]
+    | null
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<ActionLogResponseDto[]> | ActionLogResponseDto[]),
+      ) => Promise<null> | null),
 ) => {
-  return http.get('*/api/ActionLogs/all', async (info) => {
+  return http.get('*/api/action_logs/all', async (info) => {
     await delay(1000);
-
-    return new HttpResponse(
-      JSON.stringify(
-        overrideResponse !== undefined
-          ? typeof overrideResponse === 'function'
-            ? await overrideResponse(info)
-            : overrideResponse
-          : getGetApiActionLogsAllResponseMock(),
-      ),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    if (typeof overrideResponse === 'function') {
+      await overrideResponse(info);
+    }
+    return new HttpResponse(null, { status: 200 });
   });
 };
 export const getActionLogsMock = () => [

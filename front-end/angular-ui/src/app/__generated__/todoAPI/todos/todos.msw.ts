@@ -25,7 +25,7 @@ export const getCreateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -39,15 +39,15 @@ export const getCreateTodoResponseMock = (
     faker.helpers.arrayElement([0, 1, 2] as const),
     undefined,
   ]),
-  createdAt: faker.helpers.arrayElement([
+  created_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  updatedAt: faker.helpers.arrayElement([
+  updated_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  completedAt: faker.helpers.arrayElement([
+  completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       `${faker.date.past().toISOString().split('.')[0]}Z`,
       null,
@@ -61,7 +61,7 @@ export const getGetTodoByIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -75,15 +75,15 @@ export const getGetTodoByIdResponseMock = (
     faker.helpers.arrayElement([0, 1, 2] as const),
     undefined,
   ]),
-  createdAt: faker.helpers.arrayElement([
+  created_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  updatedAt: faker.helpers.arrayElement([
+  updated_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  completedAt: faker.helpers.arrayElement([
+  completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       `${faker.date.past().toISOString().split('.')[0]}Z`,
       null,
@@ -97,7 +97,7 @@ export const getUpdateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
   id: faker.helpers.arrayElement([
-    faker.number.int({ min: undefined, max: undefined, multipleOf: undefined }),
+    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
     undefined,
   ]),
   text: faker.helpers.arrayElement([
@@ -111,15 +111,15 @@ export const getUpdateTodoResponseMock = (
     faker.helpers.arrayElement([0, 1, 2] as const),
     undefined,
   ]),
-  createdAt: faker.helpers.arrayElement([
+  created_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  updatedAt: faker.helpers.arrayElement([
+  updated_at: faker.helpers.arrayElement([
     `${faker.date.past().toISOString().split('.')[0]}Z`,
     undefined,
   ]),
-  completedAt: faker.helpers.arrayElement([
+  completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       `${faker.date.past().toISOString().split('.')[0]}Z`,
       null,
@@ -131,12 +131,12 @@ export const getUpdateTodoResponseMock = (
 
 export const getGetTodosMockHandler = (
   overrideResponse?:
-    | TodoResponseDto[]
+    | null
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<TodoResponseDto[]> | TodoResponseDto[]),
+      ) => Promise<null> | null),
 ) => {
-  return http.get('*/api/Todos', async (info) => {
+  return http.get('*/api/todos', async (info) => {
     await delay(1000);
 
     return new HttpResponse(
@@ -159,7 +159,7 @@ export const getCreateTodoMockHandler = (
         info: Parameters<Parameters<typeof http.post>[1]>[0],
       ) => Promise<TodoResponseDto> | TodoResponseDto),
 ) => {
-  return http.post('*/api/Todos', async (info) => {
+  return http.post('*/api/todos', async (info) => {
     await delay(1000);
 
     return new HttpResponse(
@@ -182,7 +182,7 @@ export const getGetTodoByIdMockHandler = (
         info: Parameters<Parameters<typeof http.get>[1]>[0],
       ) => Promise<TodoResponseDto> | TodoResponseDto),
 ) => {
-  return http.get('*/api/Todos/:id', async (info) => {
+  return http.get('*/api/todos/:id', async (info) => {
     await delay(1000);
 
     return new HttpResponse(
@@ -205,7 +205,7 @@ export const getUpdateTodoMockHandler = (
         info: Parameters<Parameters<typeof http.put>[1]>[0],
       ) => Promise<TodoResponseDto> | TodoResponseDto),
 ) => {
-  return http.put('*/api/Todos/:id', async (info) => {
+  return http.put('*/api/todos/:id', async (info) => {
     await delay(1000);
 
     return new HttpResponse(
@@ -228,7 +228,7 @@ export const getDeleteTodoMockHandler = (
         info: Parameters<Parameters<typeof http.delete>[1]>[0],
       ) => Promise<null> | null),
 ) => {
-  return http.delete('*/api/Todos/:id', async (info) => {
+  return http.delete('*/api/todos/:id', async (info) => {
     await delay(1000);
     if (typeof overrideResponse === 'function') {
       await overrideResponse(info);
@@ -244,7 +244,7 @@ export const getDeleteMultipleTodosMockHandler = (
         info: Parameters<Parameters<typeof http.delete>[1]>[0],
       ) => Promise<null> | null),
 ) => {
-  return http.delete('*/api/Todos/bulk', async (info) => {
+  return http.delete('*/api/todos/bulk', async (info) => {
     await delay(1000);
     if (typeof overrideResponse === 'function') {
       await overrideResponse(info);
