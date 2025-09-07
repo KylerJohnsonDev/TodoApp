@@ -2,3 +2,7 @@
 @plugin "tailwindcss-primeui";
 @import "primeicons/primeicons.css";
 @custom-variant dark (&:where(.dark, .dark *));
+
+html, body, app-root {
+  height: 100%;
+}

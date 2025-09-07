@@ -1,10 +1,11 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { MessageService } from 'primeng/api';
-import { concatMap, pipe, switchMap, tap } from 'rxjs';
+import { catchError, concatMap, of, pipe, switchMap, tap } from 'rxjs';
 import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
 import {
   LoginDto,
@@ -41,7 +42,7 @@ export const authStore = signalStore(
             return authService.postApiAuthRegister(registerDto).pipe(
               tap((result) => {
                 if (result.token) {
-                  sessionStorage.setItem('authToken', result.token);
+                  localStorage.setItem('authToken', result.token);
                   return;
                 }
                 throw new Error('No token received upon registration');
@@ -58,19 +59,23 @@ export const authStore = signalStore(
                         'Error fetching user after registration',
                         error,
                       );
-                      patchState(store, {
-                        error: 'Registration failed',
-                        loading: false,
-                      });
-                      messageService.add({
-                        key: 'bc',
-                        severity: 'error',
-                        summary: 'Registration Failed',
-                        detail: 'Please try again later.',
-                      });
                     },
                   }),
                 );
+              }),
+              catchError((error) => {
+                console.error('Registration error', error);
+                patchState(store, {
+                  error: 'Registration failed',
+                  loading: false,
+                });
+                messageService.add({
+                  key: 'bc',
+                  severity: 'error',
+                  summary: 'Registration Failed',
+                  detail: 'Please try again later.',
+                });
+                return of([]);
               }),
             );
           }),
@@ -85,34 +90,35 @@ export const authStore = signalStore(
                 if (!result.token) {
                   throw new Error('No token received upon registration');
                 }
-                sessionStorage.setItem('authToken', result.token);
-                console.log('Login successful, token stored in sessionStorage');
+                localStorage.setItem('authToken', result.token);
               }),
               switchMap(() => {
                 return authService.getApiAuthUser().pipe(
                   tapResponse({
                     next: (user) => {
-                      console.log({ user: user.email });
                       patchState(store, { user, loading: false });
-                      console.log(
-                        'User fetched successfully - redirecting to /todos',
-                      );
                       router.navigate(['/todos']);
                     },
-                    error: (error) => {
-                      console.error('Error fetching user after login', error);
-                      patchState(store, {
-                        error: 'Login failed',
-                        loading: false,
-                      });
-                      messageService.add({
-                        severity: 'error',
-                        summary: 'Login Failed',
-                        detail: 'Please try again later.',
-                      });
+                    error: (error: HttpErrorResponse) => {
+                      const friendlyMessage =
+                        'Unable to retrieve user data after login.';
+                      console.error(
+                        `${friendlyMessage} Details: ${error.message}`,
+                      );
                     },
                   }),
                 );
+              }),
+              catchError((error) => {
+                const friendlyMessage = 'Login failed. Please try again later.';
+                console.error(friendlyMessage, error);
+                patchState(store, { error: friendlyMessage, loading: false });
+                messageService.add({
+                  severity: 'error',
+                  summary: 'Login Failed',
+                  detail: friendlyMessage,
+                });
+                return of([]);
               }),
             );
           }),
@@ -121,8 +127,13 @@ export const authStore = signalStore(
       logout: rxMethod<void>(
         pipe(
           tap(() => {
-            sessionStorage.removeItem('authToken');
+            localStorage.removeItem('authToken');
             patchState(store, { ...initialAuthState });
+            messageService.add({
+              severity: 'info',
+              summary: 'Goodbye',
+              detail: 'You have been logged out successfully.',
+            });
             router.navigate(['/login']);
           }),
         ),

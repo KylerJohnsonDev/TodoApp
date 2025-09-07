@@ -7,9 +7,23 @@ import { Header } from '../../components/header';
   imports: [RouterOutlet, Header],
   template: `
     <app-header />
-    <router-outlet></router-outlet>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
   `,
-  styles: ``,
+  styles: `
+    :host {
+      display: flex;
+      height: 100%;
+      flex-direction: column;
+      gap: 1rem;
+      padding: 1rem;
+
+      main {
+        flex: 1;
+      }
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class Layout {}

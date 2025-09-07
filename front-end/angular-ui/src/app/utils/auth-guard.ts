@@ -5,7 +5,7 @@ import { authStore } from './auth-store';
 export const isAuthenticated: CanActivateFn = (route, state) => {
   const _authStore = inject(authStore);
   const user = _authStore.user();
-  const token = sessionStorage.getItem('authToken');
+  const token = localStorage.getItem('authToken');
   if (!user || !token) {
     console.log({ user, token });
     console.log(route, state);
