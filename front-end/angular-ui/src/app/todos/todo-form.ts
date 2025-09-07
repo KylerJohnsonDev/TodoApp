@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -16,11 +21,13 @@ import { InputTextModule } from 'primeng/inputtext';
           type="text"
           pSize="large"
           placeholder="Type new to-do and hit Enter"
+          (keydown.enter)="submitTodo()"
         />
         <p-button
           label="Add"
           severity="success"
-          (click)="submitNewTodo.emit(todoText)"
+          [loading]="isLoading()"
+          (click)="submitTodo()"
         />
       </div>
     </p-card>
@@ -38,6 +45,12 @@ import { InputTextModule } from 'primeng/inputtext';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoForm {
+  readonly isLoading = input<boolean>(false);
   readonly submitNewTodo = output<string>();
   todoText = '';
+
+  submitTodo(): void {
+    this.submitNewTodo.emit(this.todoText);
+    this.todoText = '';
+  }
 }

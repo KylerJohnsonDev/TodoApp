@@ -1,4 +1,3 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { tapResponse } from '@ngrx/operators';
@@ -34,8 +33,8 @@ export const authStore = signalStore(
       authService = inject(AuthService),
       messageService = inject(MessageService),
       router = inject(Router),
-    ) => ({
-      register: rxMethod<RegisterDto>(
+    ) => {
+      const register = rxMethod<RegisterDto>(
         pipe(
           concatMap((registerDto) => {
             patchState(store, { loading: true, error: null });
@@ -43,25 +42,10 @@ export const authStore = signalStore(
               tap((result) => {
                 if (result.token) {
                   localStorage.setItem('authToken', result.token);
+                  fetchUser();
                   return;
                 }
                 throw new Error('No token received upon registration');
-              }),
-              switchMap(() => {
-                return authService.getApiAuthUser().pipe(
-                  tapResponse({
-                    next: (user) => {
-                      patchState(store, { user, loading: false });
-                      router.navigate(['/']);
-                    },
-                    error: (error) => {
-                      console.error(
-                        'Error fetching user after registration',
-                        error,
-                      );
-                    },
-                  }),
-                );
               }),
               catchError((error) => {
                 console.error('Registration error', error);
@@ -80,8 +64,8 @@ export const authStore = signalStore(
             );
           }),
         ),
-      ),
-      login: rxMethod<LoginDto>(
+      );
+      const login = rxMethod<LoginDto>(
         pipe(
           concatMap((loginDto) => {
             patchState(store, { loading: true, error: null });
@@ -91,40 +75,26 @@ export const authStore = signalStore(
                   throw new Error('No token received upon registration');
                 }
                 localStorage.setItem('authToken', result.token);
+                fetchUser();
               }),
-              switchMap(() => {
-                return authService.getApiAuthUser().pipe(
-                  tapResponse({
-                    next: (user) => {
-                      patchState(store, { user, loading: false });
-                      router.navigate(['/todos']);
-                    },
-                    error: (error: HttpErrorResponse) => {
-                      const friendlyMessage =
-                        'Unable to retrieve user data after login.';
-                      console.error(
-                        `${friendlyMessage} Details: ${error.message}`,
-                      );
-                    },
-                  }),
-                );
-              }),
-              catchError((error) => {
-                const friendlyMessage = 'Login failed. Please try again later.';
-                console.error(friendlyMessage, error);
-                patchState(store, { error: friendlyMessage, loading: false });
+              catchError((errorResponse) => {
+                console.error(errorResponse);
+                const errorMessage =
+                  errorResponse?.error?.message ??
+                  'Unable to authenticate. Please try again later.';
+                patchState(store, { error: errorMessage, loading: false });
                 messageService.add({
                   severity: 'error',
                   summary: 'Login Failed',
-                  detail: friendlyMessage,
+                  detail: errorMessage,
                 });
                 return of([]);
               }),
             );
           }),
         ),
-      ),
-      logout: rxMethod<void>(
+      );
+      const logout = rxMethod<void>(
         pipe(
           tap(() => {
             localStorage.removeItem('authToken');
@@ -137,7 +107,43 @@ export const authStore = signalStore(
             router.navigate(['/login']);
           }),
         ),
-      ),
-    }),
+      );
+
+      const fetchUser = rxMethod<void>(
+        pipe(
+          switchMap(() => {
+            return authService.getApiAuthUser().pipe(
+              tapResponse({
+                next: (user) => {
+                  console.log('Fetched user', user);
+                  patchState(store, { user, loading: false });
+                  router.navigate(['/']);
+                },
+                error: (error) => {
+                  console.error('Error fetching user', error);
+                },
+              }),
+              // tapResponse({
+              //   next: (user) => {
+              //     patchState(store, { user, loading: false });
+              //     router.navigate(['/']);
+              //   },
+              //   error: (error) => {
+              //     console.error('Error fetching user', error);
+              //   },
+              // }),
+              // map((user) => user),
+            );
+          }),
+        ),
+      );
+
+      return {
+        register,
+        login,
+        logout,
+        fetchUser,
+      };
+    },
   ),
 );

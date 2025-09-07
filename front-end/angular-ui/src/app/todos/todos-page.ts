@@ -13,7 +13,10 @@ import { todosStore } from './todos.store';
   selector: 'app-todos',
   imports: [TodoTable, TodoForm],
   template: `
-    <app-todo-form />
+    <app-todo-form
+      [isLoading]="store.CREATE_TODO_KEYLoading()"
+      (submitNewTodo)="store.createTodo($event)"
+    />
 
     <app-todo-table [todos]="store.todos()" />
   `,
