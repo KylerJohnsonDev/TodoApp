@@ -131,10 +131,10 @@ export const getUpdateTodoResponseMock = (
 
 export const getGetTodosMockHandler = (
   overrideResponse?:
-    | null
+    | TodoResponseDto[]
     | ((
         info: Parameters<Parameters<typeof http.get>[1]>[0],
-      ) => Promise<null> | null),
+      ) => Promise<TodoResponseDto[]> | TodoResponseDto[]),
 ) => {
   return http.get('*/api/todos', async (info) => {
     await delay(1000);

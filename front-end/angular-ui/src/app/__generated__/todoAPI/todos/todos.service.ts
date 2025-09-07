@@ -50,16 +50,16 @@ interface HttpClientOptions {
 @Injectable({ providedIn: 'root' })
 export class TodosService {
   private readonly http = inject(HttpClient);
-  getTodos<TData = null>(
+  getTodos<TData = TodoResponseDto[]>(
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getTodos<TData = null>(
+  getTodos<TData = TodoResponseDto[]>(
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getTodos<TData = null>(
+  getTodos<TData = TodoResponseDto[]>(
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getTodos<TData = null>(
+  getTodos<TData = TodoResponseDto[]>(
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.get<TData>(`/api/todos`, options);
@@ -163,7 +163,7 @@ export class TodosService {
   }
 }
 
-export type GetTodosClientResult = never;
+export type GetTodosClientResult = NonNullable<TodoResponseDto[]>;
 export type CreateTodoClientResult = NonNullable<TodoResponseDto>;
 export type GetTodoByIdClientResult = NonNullable<TodoResponseDto>;
 export type UpdateTodoClientResult = NonNullable<TodoResponseDto>;

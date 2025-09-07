@@ -16,7 +16,7 @@ export const routes: Routes = [
     component: Layout,
     canActivateChild: [isAuthenticated],
     children: [
-      { path: 'todos', loadComponent: () => import('./pages/protected/todos') },
+      { path: 'todos', loadComponent: () => import('./todos/todos-page') },
       {
         path: 'action-logs',
         loadComponent: () => import('./pages/protected/action-logs'),

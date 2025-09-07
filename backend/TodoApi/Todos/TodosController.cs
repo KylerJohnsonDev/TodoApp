@@ -36,13 +36,13 @@ public class TodosController : ControllerBase
 
     [HttpGet]
     [SwaggerOperation(OperationId = "GetTodos")]
-    public async Task<ActionResult<object>> GetTodos()
+    public async Task<ActionResult<IEnumerable<TodoResponseDto>>> GetTodos()
     {
         try
         {
             var userId = GetCurrentUserId();
             var todos = await _todoService.GetTodosAsync(userId);
-            return Ok(new { items = todos });
+            return Ok(todos);
         }
         catch (UnauthorizedAccessException)
         {

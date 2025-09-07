@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { TodoTable } from '../../components/todos/todo-table';
+import { TodoTable } from './todo-table';
 
 @Component({
   selector: 'app-todos',
@@ -8,4 +8,4 @@ import { TodoTable } from '../../components/todos/todo-table';
   styles: ``,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class Todos {}
+export default class TodosPage {}

@@ -1,8 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { TableModule } from 'primeng/table';
-import { getGetTodosResponseMock } from '../../__generated__/todoAPI/todos/todos.msw';
-import { TodosService } from '../../__generated__/todoAPI/todos/todos.service';
+import { getGetTodosResponseMock } from '../__generated__/todoAPI/todos/todos.msw';
+import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 
 @Component({
   selector: 'app-todo-table',
@@ -10,7 +10,7 @@ import { TodosService } from '../../__generated__/todoAPI/todos/todos.service';
   template: `
     <p-table
       [value]="todos"
-      [(selection)]="todos"
+      [(selection)]="selectedTodos"
       dataKey="code"
       [tableStyle]="{ 'min-width': '50rem' }"
     >
@@ -43,4 +43,5 @@ import { TodosService } from '../../__generated__/todoAPI/todos/todos.service';
 export class TodoTable {
   readonly todoService = inject(TodosService);
   readonly todos = getGetTodosResponseMock();
+  selectedTodos = [];
 }
