@@ -71,6 +71,7 @@ export const todosStore = signalStore(
                 next: (newTodo): void => {
                   const currentTodos = [...store.todos()];
                   currentTodos.splice(0, 0, newTodo);
+
                   patchState(store, setLoaded(CREATE_TODO_KEY), {
                     todos: currentTodos,
                   });
@@ -90,9 +91,42 @@ export const todosStore = signalStore(
           }),
         ),
       );
+      const deleteTodo = rxMethod<TodoResponseDto>(
+        pipe(
+          concatMap((todo) => {
+            return todosService.deleteTodo(todo.id).pipe(
+              tapResponse({
+                next: (): void => {
+                  const currentTodos = store
+                    .todos()
+                    .filter((t) => t.id !== todo.id);
+                  patchState(store, setLoaded(DELETE_TODO_KEY), {
+                    todos: currentTodos,
+                  });
+                  messageService.add({
+                    severity: 'success',
+                    summary: 'To-Do Deleted',
+                    detail: `Deleted to-do "${todo.text}"`,
+                  });
+                },
+                error: (error: HttpErrorResponse): void => {
+                  const friendlyMessage = `Error deleting todo "${todo.text}".`;
+                  console.error(`${friendlyMessage} Details:`, error);
+                  messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: friendlyMessage,
+                  });
+                },
+              }),
+            );
+          }),
+        ),
+      );
       return {
         fetchTodos,
         createTodo,
+        deleteTodo,
       };
     },
   ),

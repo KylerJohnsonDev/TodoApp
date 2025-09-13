@@ -43,6 +43,10 @@ export interface DeleteMultipleTodosDto {
   todo_ids: number[];
 }
 
+export interface EmptyResult {
+  [key: string]: unknown;
+}
+
 export interface LoginDto {
   /** @minLength 1 */
   username_or_email: string;
@@ -80,7 +84,7 @@ export interface TodoResponseDto {
    * @minimum 0
    * @maximum 2147483647
    */
-  id?: number;
+  id: number;
   /** @nullable */
   text?: string | null;
   status?: TodoStatus;

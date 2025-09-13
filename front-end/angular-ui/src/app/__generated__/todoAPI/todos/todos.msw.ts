@@ -8,7 +8,7 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
-import type { TodoResponseDto } from '../todoApi.schemas';
+import type { EmptyResult, TodoResponseDto } from '../todoApi.schemas';
 
 export const getGetTodosResponseMock = () =>
   (() => {
@@ -24,10 +24,7 @@ export const getGetTodosResponseMock = () =>
 export const getCreateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
-  id: faker.helpers.arrayElement([
-    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
-    undefined,
-  ]),
+  id: faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
   text: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -60,10 +57,7 @@ export const getCreateTodoResponseMock = (
 export const getGetTodoByIdResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
-  id: faker.helpers.arrayElement([
-    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
-    undefined,
-  ]),
+  id: faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
   text: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -96,10 +90,7 @@ export const getGetTodoByIdResponseMock = (
 export const getUpdateTodoResponseMock = (
   overrideResponse: Partial<TodoResponseDto> = {},
 ): TodoResponseDto => ({
-  id: faker.helpers.arrayElement([
-    faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
-    undefined,
-  ]),
+  id: faker.number.int({ min: 0, max: 2147483647, multipleOf: undefined }),
   text: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
       faker.string.alpha({ length: { min: 10, max: 20 } }),
@@ -128,6 +119,8 @@ export const getUpdateTodoResponseMock = (
   ]),
   ...overrideResponse,
 });
+
+export const getDeleteTodoResponseMock = (): EmptyResult => ({});
 
 export const getGetTodosMockHandler = (
   overrideResponse?:
@@ -223,17 +216,24 @@ export const getUpdateTodoMockHandler = (
 
 export const getDeleteTodoMockHandler = (
   overrideResponse?:
-    | null
+    | EmptyResult
     | ((
         info: Parameters<Parameters<typeof http.delete>[1]>[0],
-      ) => Promise<null> | null),
+      ) => Promise<EmptyResult> | EmptyResult),
 ) => {
   return http.delete('*/api/todos/:id', async (info) => {
     await delay(1000);
-    if (typeof overrideResponse === 'function') {
-      await overrideResponse(info);
-    }
-    return new HttpResponse(null, { status: 200 });
+
+    return new HttpResponse(
+      JSON.stringify(
+        overrideResponse !== undefined
+          ? typeof overrideResponse === 'function'
+            ? await overrideResponse(info)
+            : overrideResponse
+          : getDeleteTodoResponseMock(),
+      ),
+      { status: 200, headers: { 'Content-Type': 'application/json' } },
+    );
   });
 };
 

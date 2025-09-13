@@ -2,16 +2,17 @@ import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  effect,
   input,
+  output,
 } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TodoResponseDto } from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 
 @Component({
   selector: 'app-todo-table',
-  imports: [TableModule, DatePipe],
+  imports: [TableModule, DatePipe, ButtonModule],
   template: `
     <p-table
       [value]="todos()"
@@ -26,6 +27,7 @@ import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
           <th>Created</th>
           <th>Status</th>
           <th>Date Completed</th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template #body let-todo>
@@ -37,6 +39,13 @@ import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
           <td>{{ todo.createdAt | date }}</td>
           <td>{{ todo.status }}</td>
           <td>{{ todo.completedAt | date }}</td>
+          <td>
+            <p-button
+              severity="danger"
+              icon="pi pi-trash"
+              (click)="deleteTodo.emit(todo)"
+            />
+          </td>
         </tr>
       </ng-template>
     </p-table>
@@ -46,9 +55,7 @@ import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoTable {
-  todos = input<TodoResponseDto[]>([]);
+  readonly todos = input<TodoResponseDto[]>([]);
   selectedTodos = [];
-  log = effect(() => {
-    console.table(this.todos());
-  });
+  readonly deleteTodo = output<TodoResponseDto>();
 }

@@ -18,7 +18,10 @@ import { todosStore } from './todos.store';
       (submitNewTodo)="store.createTodo($event)"
     />
 
-    <app-todo-table [todos]="store.todos()" />
+    <app-todo-table
+      [todos]="store.todos()"
+      (deleteTodo)="store.deleteTodo($event)"
+    />
   `,
   styles: `
     :host {

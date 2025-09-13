@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TodoApi.Todos;
 
-
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 public class CreateTodoDto
@@ -35,6 +35,7 @@ public class DeleteMultipleTodosDto
 
 public class TodoResponseDto
 {
+    [Required]
     [Range(0, int.MaxValue)]
     [JsonPropertyName("id")]
     public int Id { get; set; }
