@@ -31,15 +31,7 @@ public class TodoService : ITodoService
         var todos = await _context.Todos
             .Where(t => t.UserId == userId)
             .OrderByDescending(t => t.CreatedAt)
-            .Select(t => new TodoResponseDto
-            {
-                Id = t.Id,
-                Text = t.Text,
-                Status = t.Status,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                CompletedAt = t.CompletedAt
-            })
+            .Select(t => new TodoResponseDto(t))
             .ToListAsync();
 
         return todos;
@@ -49,15 +41,7 @@ public class TodoService : ITodoService
     {
         var todo = await _context.Todos
             .Where(t => t.Id == id && t.UserId == userId)
-            .Select(t => new TodoResponseDto
-            {
-                Id = t.Id,
-                Text = t.Text,
-                Status = t.Status,
-                CreatedAt = t.CreatedAt,
-                UpdatedAt = t.UpdatedAt,
-                CompletedAt = t.CompletedAt
-            })
+            .Select(t => new TodoResponseDto(t))
             .FirstOrDefaultAsync();
 
         return todo;
@@ -79,15 +63,7 @@ public class TodoService : ITodoService
         // Log the action
         await _actionLogService.CreateActionLogAsync(username, userId, $"Created todo: '{createTodoDto.Text}'");
 
-        return new TodoResponseDto
-        {
-            Id = todo.Id,
-            Text = todo.Text,
-            Status = todo.Status,
-            CreatedAt = todo.CreatedAt,
-            UpdatedAt = todo.UpdatedAt,
-            CompletedAt = todo.CompletedAt
-        };
+        return new TodoResponseDto(todo);
     }
 
     public async Task<TodoResponseDto?> UpdateTodoAsync(int id, UpdateTodoDto updateTodoDto, int userId, string username)
@@ -124,15 +100,7 @@ public class TodoService : ITodoService
             await _actionLogService.CreateActionLogAsync(username, userId, actionDescription);
         }
 
-        return new TodoResponseDto
-        {
-            Id = todo.Id,
-            Text = todo.Text,
-            Status = todo.Status,
-            CreatedAt = todo.CreatedAt,
-            UpdatedAt = todo.UpdatedAt,
-            CompletedAt = todo.CompletedAt
-        };
+        return new TodoResponseDto(todo);
     }
 
     public async Task<bool> DeleteTodoAsync(int id, int userId, string username)
@@ -163,12 +131,12 @@ public class TodoService : ITodoService
             return 0;
 
         var deletedTodoTexts = todosToDelete.Select(t => $"'{t.Text}' (ID: {t.Id})").ToList();
-        
+
         _context.Todos.RemoveRange(todosToDelete);
         await _context.SaveChangesAsync();
-        
+
         // Log the action
-        await _actionLogService.CreateActionLogAsync(username, userId, 
+        await _actionLogService.CreateActionLogAsync(username, userId,
             $"Bulk deleted {todosToDelete.Count} todos: {string.Join(", ", deletedTodoTexts)}");
 
         return todosToDelete.Count;

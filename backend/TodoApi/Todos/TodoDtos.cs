@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 namespace TodoApi.Todos;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Text.Json.Serialization;
 
 public class CreateTodoDto
@@ -48,11 +49,21 @@ public class TodoResponseDto
     public TodoStatus Status { get; set; }
 
     [JsonPropertyName("created_at")]
-    public DateTime CreatedAt { get; set; }
+    public string CreatedAt { get; set; } = string.Empty;
 
     [JsonPropertyName("updated_at")]
-    public DateTime UpdatedAt { get; set; }
+    public string UpdatedAt { get; set; } = string.Empty;
 
     [JsonPropertyName("completed_at")]
-    public DateTime? CompletedAt { get; set; }
+    public string? CompletedAt { get; set; }
+
+    public TodoResponseDto(Todo todo)
+    {
+        Id = todo.Id;
+        Text = todo.Text;
+        Status = todo.Status;
+        CreatedAt = todo.CreatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        UpdatedAt = todo.UpdatedAt.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+        CompletedAt = todo.CompletedAt?.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture);
+    }
 }

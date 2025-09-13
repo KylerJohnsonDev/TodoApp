@@ -11,7 +11,11 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { concatMap, pipe, switchMap } from 'rxjs';
-import { TodoResponseDto } from '../__generated__/todoAPI/todoApi.schemas';
+import {
+  TodoResponseDto,
+  TodoStatus,
+  UpdateTodoDto,
+} from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 
 const FETCH_TODOS_KEY = 'FETCH_TODOS_KEY';
@@ -123,10 +127,54 @@ export const todosStore = signalStore(
           }),
         ),
       );
+      const updateTodo = rxMethod<{
+        todo: TodoResponseDto;
+        type: 'complete' | 'reopen';
+      }>(
+        pipe(
+          concatMap(({ todo, type }) => {
+            const updateTodoDto: UpdateTodoDto = {
+              status:
+                type === 'complete' ? TodoStatus.NUMBER_2 : TodoStatus.NUMBER_1,
+              text: todo.text,
+            };
+            return todosService.updateTodo(todo.id, updateTodoDto).pipe(
+              tapResponse({
+                next: (updatedTodo): void => {
+                  const currentTodos = [...store.todos()];
+                  const index = currentTodos.findIndex(
+                    (t) => t.id === updatedTodo.id,
+                  );
+                  currentTodos.splice(index, 1, updatedTodo);
+                  patchState(store, {
+                    todos: currentTodos,
+                  });
+
+                  messageService.add({
+                    severity: 'success',
+                    summary: 'To-Do Updated',
+                    detail: `${type === 'complete' ? 'Completed' : 'Reopened'} to-do "${updatedTodo.text}"`,
+                  });
+                },
+                error: (error: HttpErrorResponse): void => {
+                  const friendlyMessage = `Error updating todo "${todo.text}".`;
+                  console.error(`${friendlyMessage} Details:`, error);
+                  messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: friendlyMessage,
+                  });
+                },
+              }),
+            );
+          }),
+        ),
+      );
       return {
         fetchTodos,
         createTodo,
         deleteTodo,
+        updateTodo,
       };
     },
   ),

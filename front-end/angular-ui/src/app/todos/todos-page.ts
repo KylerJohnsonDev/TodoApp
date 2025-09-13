@@ -21,6 +21,7 @@ import { todosStore } from './todos.store';
     <app-todo-table
       [todos]="store.todos()"
       (deleteTodo)="store.deleteTodo($event)"
+      (updateTodo)="store.updateTodo($event)"
     />
   `,
   styles: `
