@@ -5,11 +5,12 @@ using TodoApi.Auth;
 
 namespace TodoApi.Todos;
 
+[JsonConverter(typeof(JsonStringEnumConverter<TodoStatus>))]
 public enum TodoStatus
 {
-    Incomplete,
-    InProgress,
-    Complete
+    Incomplete = 0,
+    InProgress = 1,
+    Complete = 2
 }
 
 public class Todo

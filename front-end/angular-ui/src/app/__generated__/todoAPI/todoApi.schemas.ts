@@ -43,10 +43,6 @@ export interface DeleteMultipleTodosDto {
   todo_ids: number[];
 }
 
-export interface EmptyResult {
-  [key: string]: unknown;
-}
-
 export interface LoginDto {
   /** @minLength 1 */
   username_or_email: string;
@@ -88,8 +84,10 @@ export interface TodoResponseDto {
   /** @nullable */
   text?: string | null;
   status?: TodoStatus;
-  created_at?: string;
-  updated_at?: string;
+  /** @nullable */
+  created_at?: string | null;
+  /** @nullable */
+  updated_at?: string | null;
   /** @nullable */
   completed_at?: string | null;
 }
@@ -98,9 +96,9 @@ export type TodoStatus = (typeof TodoStatus)[keyof typeof TodoStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TodoStatus = {
-  NUMBER_0: 0,
-  NUMBER_1: 1,
-  NUMBER_2: 2,
+  Incomplete: 'Incomplete',
+  InProgress: 'InProgress',
+  Complete: 'Complete',
 } as const;
 
 export interface UpdateTodoDto {

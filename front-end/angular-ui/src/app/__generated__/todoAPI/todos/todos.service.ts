@@ -20,7 +20,6 @@ import { Observable } from 'rxjs';
 import type {
   CreateTodoDto,
   DeleteMultipleTodosDto,
-  EmptyResult,
   TodoResponseDto,
   UpdateTodoDto,
 } from '../todoApi.schemas';
@@ -123,19 +122,19 @@ export class TodosService {
   ): Observable<any> {
     return this.http.put<TData>(`/api/todos/${id}`, updateTodoDto, options);
   }
-  deleteTodo<TData = EmptyResult>(
+  deleteTodo<TData = null>(
     id: number,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  deleteTodo<TData = EmptyResult>(
+  deleteTodo<TData = null>(
     id: number,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  deleteTodo<TData = EmptyResult>(
+  deleteTodo<TData = null>(
     id: number,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  deleteTodo<TData = EmptyResult>(
+  deleteTodo<TData = null>(
     id: number,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
@@ -168,5 +167,5 @@ export type GetTodosClientResult = NonNullable<TodoResponseDto[]>;
 export type CreateTodoClientResult = NonNullable<TodoResponseDto>;
 export type GetTodoByIdClientResult = NonNullable<TodoResponseDto>;
 export type UpdateTodoClientResult = NonNullable<TodoResponseDto>;
-export type DeleteTodoClientResult = NonNullable<EmptyResult>;
+export type DeleteTodoClientResult = never;
 export type DeleteMultipleTodosClientResult = never;

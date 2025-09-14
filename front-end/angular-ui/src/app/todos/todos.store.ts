@@ -136,7 +136,9 @@ export const todosStore = signalStore(
           concatMap(({ todo, type }) => {
             const updateTodoDto: UpdateTodoDto = {
               status:
-                type === 'complete' ? TodoStatus.NUMBER_2 : TodoStatus.NUMBER_1,
+                type === 'complete'
+                  ? TodoStatus.Complete
+                  : TodoStatus.InProgress,
               text: todo.text,
             };
             return todosService.updateTodo(todo.id, updateTodoDto).pipe(

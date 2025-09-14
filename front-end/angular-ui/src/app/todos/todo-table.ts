@@ -75,7 +75,7 @@ import { TodoTableMenuActions } from './todo.models';
               <p-tableCheckbox [value]="todo" />
             </td>
             <td
-              [class]="{ 'line-through': todo.status === TodoStatus.NUMBER_2 }"
+              [class]="{ 'line-through': todo.status === TodoStatus.Complete }"
             >
               {{ todo.text }}
             </td>
@@ -94,7 +94,7 @@ import { TodoTableMenuActions } from './todo.models';
                 icon="pi pi-trash"
                 (click)="deleteTodo.emit(todo)"
               />
-              @if (todo.status === TodoStatus.NUMBER_2) {
+              @if (todo.status === TodoStatus.Complete) {
                 <p-button
                   severity="secondary"
                   icon="pi pi-undo"

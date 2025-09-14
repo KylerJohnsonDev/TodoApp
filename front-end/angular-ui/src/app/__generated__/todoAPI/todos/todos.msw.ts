@@ -8,7 +8,8 @@ import { faker } from '@faker-js/faker';
 
 import { HttpResponse, delay, http } from 'msw';
 
-import type { EmptyResult, TodoResponseDto } from '../todoApi.schemas';
+import { TodoStatus } from '../todoApi.schemas';
+import type { TodoResponseDto } from '../todoApi.schemas';
 
 export const getGetTodosResponseMock = () =>
   (() => {
@@ -33,20 +34,26 @@ export const getCreateTodoResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([0, 1, 2] as const),
+    faker.helpers.arrayElement(Object.values(TodoStatus)),
     undefined,
   ]),
   created_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   updated_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
       null,
     ]),
     undefined,
@@ -66,20 +73,26 @@ export const getGetTodoByIdResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([0, 1, 2] as const),
+    faker.helpers.arrayElement(Object.values(TodoStatus)),
     undefined,
   ]),
   created_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   updated_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
       null,
     ]),
     undefined,
@@ -99,28 +112,32 @@ export const getUpdateTodoResponseMock = (
     undefined,
   ]),
   status: faker.helpers.arrayElement([
-    faker.helpers.arrayElement([0, 1, 2] as const),
+    faker.helpers.arrayElement(Object.values(TodoStatus)),
     undefined,
   ]),
   created_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   updated_at: faker.helpers.arrayElement([
-    `${faker.date.past().toISOString().split('.')[0]}Z`,
+    faker.helpers.arrayElement([
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
+      null,
+    ]),
     undefined,
   ]),
   completed_at: faker.helpers.arrayElement([
     faker.helpers.arrayElement([
-      `${faker.date.past().toISOString().split('.')[0]}Z`,
+      faker.string.alpha({ length: { min: 10, max: 20 } }),
       null,
     ]),
     undefined,
   ]),
   ...overrideResponse,
 });
-
-export const getDeleteTodoResponseMock = (): EmptyResult => ({});
 
 export const getGetTodosMockHandler = (
   overrideResponse?:
@@ -216,24 +233,17 @@ export const getUpdateTodoMockHandler = (
 
 export const getDeleteTodoMockHandler = (
   overrideResponse?:
-    | EmptyResult
+    | null
     | ((
         info: Parameters<Parameters<typeof http.delete>[1]>[0],
-      ) => Promise<EmptyResult> | EmptyResult),
+      ) => Promise<null> | null),
 ) => {
   return http.delete('*/api/todos/:id', async (info) => {
     await delay(1000);
-
-    return new HttpResponse(
-      JSON.stringify(
-        overrideResponse !== undefined
-          ? typeof overrideResponse === 'function'
-            ? await overrideResponse(info)
-            : overrideResponse
-          : getDeleteTodoResponseMock(),
-      ),
-      { status: 200, headers: { 'Content-Type': 'application/json' } },
-    );
+    if (typeof overrideResponse === 'function') {
+      await overrideResponse(info);
+    }
+    return new HttpResponse(null, { status: 200 });
   });
 };
 
