@@ -14,7 +14,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { JwtModule } from '@auth0/angular-jwt';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import Aura from '@primeuix/themes/aura';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
@@ -47,10 +47,11 @@ export const appConfig: ApplicationConfig = {
     provideAppInitializer(() => {
       const _authStore = inject(authStore);
       const router = inject(Router);
+      const jwtHelperService = inject(JwtHelperService);
 
       const token = localStorage.getItem('authToken');
-
-      if (!token) {
+      const isTokenExpired = jwtHelperService.isTokenExpired(token);
+      if (!token || isTokenExpired) {
         console.log('No auth token found on app init, navigating to /login');
         router.navigate(['/login']);
         return EMPTY;

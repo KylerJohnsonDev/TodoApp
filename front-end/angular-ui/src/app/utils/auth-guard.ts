@@ -1,12 +1,15 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { authStore } from './auth-store';
 
 export const isAuthenticated: CanActivateFn = (route, state) => {
   const _authStore = inject(authStore);
+  const jwtHelperService = inject(JwtHelperService);
   const user = _authStore.user();
   const token = localStorage.getItem('authToken');
-  if (!user || !token) {
+  const isTokenExpired = jwtHelperService.isTokenExpired(token);
+  if (!user || !token || isTokenExpired) {
     console.log({ user, token });
     console.log(route, state);
     localStorage.setItem('redirectAfterLogin', state.url);
