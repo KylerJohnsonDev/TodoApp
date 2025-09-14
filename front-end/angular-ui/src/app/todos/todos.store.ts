@@ -12,6 +12,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { concatMap, pipe, switchMap } from 'rxjs';
 import {
+  DeleteMultipleTodosDto,
   TodoResponseDto,
   TodoStatus,
   UpdateTodoDto,
@@ -170,11 +171,49 @@ export const todosStore = signalStore(
           }),
         ),
       );
+      const deleteMultipleTodos = rxMethod<TodoResponseDto[]>(
+        pipe(
+          concatMap((todos: TodoResponseDto[]) => {
+            const deleteMultipleTodosDto: DeleteMultipleTodosDto = {
+              todo_ids: todos.map((t) => t.id),
+            };
+            return todosService
+              .deleteMultipleTodos(deleteMultipleTodosDto)
+              .pipe(
+                tapResponse({
+                  next: (): void => {
+                    const currentTodos = store
+                      .todos()
+                      .filter((t) => !todos.includes(t));
+                    patchState(store, setLoaded(DELETE_TODO_KEY), {
+                      todos: currentTodos,
+                    });
+                    messageService.add({
+                      severity: 'success',
+                      summary: 'To-Dos Deleted',
+                      detail: `Deleted ${todos.length} to-dos`,
+                    });
+                  },
+                  error: (error: HttpErrorResponse): void => {
+                    const friendlyMessage = `Error deleting multiple to-dos.`;
+                    console.error(`${friendlyMessage} Details:`, error);
+                    messageService.add({
+                      severity: 'error',
+                      summary: 'Error',
+                      detail: friendlyMessage,
+                    });
+                  },
+                }),
+              );
+          }),
+        ),
+      );
       return {
         fetchTodos,
         createTodo,
         deleteTodo,
         updateTodo,
+        deleteMultipleTodos,
       };
     },
   ),

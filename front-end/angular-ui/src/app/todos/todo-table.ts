@@ -18,6 +18,7 @@ import {
   TodoStatus,
 } from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
+import { TodoTableMenuActions } from './todo.models';
 
 @Component({
   selector: 'app-todo-table',
@@ -124,6 +125,10 @@ export class TodoTable {
     todo: TodoResponseDto;
     type: 'complete' | 'reopen';
   }>();
+  readonly tableActionSelected = output<{
+    action: TodoTableMenuActions;
+    todos: TodoResponseDto[];
+  }>();
   readonly TodoStatus = TodoStatus;
   readonly actionsMenuIcon = signal('pi pi-chevron-right');
   readonly items = computed<MenuItem[]>(() => {
@@ -152,7 +157,10 @@ export class TodoTable {
         label: 'Delete selected items',
         icon: 'pi pi-trash',
         command: () => {
-          alert('Delete selected items');
+          this.tableActionSelected.emit({
+            action: 'delete_many',
+            todos: this.selectedTodos(),
+          });
         },
         disabled: this.selectedTodos().length === 0,
         tooltip:
