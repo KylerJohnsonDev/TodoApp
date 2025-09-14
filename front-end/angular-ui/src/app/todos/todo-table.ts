@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   output,
   signal,
@@ -11,6 +12,7 @@ import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { MenuModule } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import {
   TodoResponseDto,
   TodoStatus,
@@ -19,19 +21,26 @@ import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 
 @Component({
   selector: 'app-todo-table',
-  imports: [TableModule, CardModule, DatePipe, ButtonModule, MenuModule],
+  imports: [
+    TableModule,
+    CardModule,
+    DatePipe,
+    ButtonModule,
+    MenuModule,
+    TooltipModule,
+  ],
   template: `
     <p-card>
       <section class="mx-4 py-2 flex justify-between align-items">
         <div class="flex gap-1">
           <h2 class="m-0">{{ todos().length }} Tasks</h2>
-          @if (selectedTodos.length > 0) {
-            ({{ selectedTodos.length }} selected)
+          @if (selectedTodos().length > 0) {
+            ({{ selectedTodos().length }} selected)
           }
         </div>
         <p-menu
           #menu
-          [model]="items"
+          [model]="items()"
           [popup]="true"
           (onShow)="actionsMenuIcon.set('pi pi-chevron-down')"
           (onHide)="actionsMenuIcon.set('pi pi-chevron-right')"
@@ -109,7 +118,7 @@ import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 })
 export class TodoTable {
   readonly todos = input<TodoResponseDto[]>([]);
-  selectedTodos = [];
+  selectedTodos = signal<TodoResponseDto[]>([]);
   readonly deleteTodo = output<TodoResponseDto>();
   readonly updateTodo = output<{
     todo: TodoResponseDto;
@@ -117,27 +126,38 @@ export class TodoTable {
   }>();
   readonly TodoStatus = TodoStatus;
   readonly actionsMenuIcon = signal('pi pi-chevron-right');
-  readonly items: MenuItem[] = [
-    {
-      label: 'Complete selected items',
-      icon: 'pi pi-check',
-      command: () => {
-        alert('Complete selected items');
+  readonly items = computed<MenuItem[]>(() => {
+    return [
+      {
+        label: 'Complete selected items',
+        icon: 'pi pi-check',
+        command: () => {
+          alert('Complete selected items');
+        },
+        disabled: this.selectedTodos().length === 0,
+        tooltip:
+          this.selectedTodos().length === 0 ? 'Select items to complete' : '',
       },
-    },
-    {
-      label: 'Reopen selected items',
-      icon: 'pi pi-undo',
-      command: () => {
-        alert('Reopen selected items');
+      {
+        label: 'Reopen selected items',
+        icon: 'pi pi-undo',
+        command: () => {
+          alert('Reopen selected items');
+        },
+        disabled: this.selectedTodos().length === 0,
+        tooltip:
+          this.selectedTodos().length === 0 ? 'Select items to reopen' : '',
       },
-    },
-    {
-      label: 'Delete selected items',
-      icon: 'pi pi-trash',
-      command: () => {
-        alert('Delete selected items');
+      {
+        label: 'Delete selected items',
+        icon: 'pi pi-trash',
+        command: () => {
+          alert('Delete selected items');
+        },
+        disabled: this.selectedTodos().length === 0,
+        tooltip:
+          this.selectedTodos().length === 0 ? 'Select items to delete' : '',
       },
-    },
-  ];
+    ];
+  });
 }
