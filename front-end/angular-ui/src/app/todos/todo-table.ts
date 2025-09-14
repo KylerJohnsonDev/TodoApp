@@ -161,6 +161,7 @@ export class TodoTable {
             action: 'delete_many',
             todos: this.selectedTodos(),
           });
+          this.selectedTodos.set([]);
         },
         disabled: this.selectedTodos().length === 0,
         tooltip:

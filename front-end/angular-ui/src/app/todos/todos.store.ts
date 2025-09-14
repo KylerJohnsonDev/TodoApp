@@ -26,10 +26,12 @@ const DELETE_MANY_TODOS_KEY = 'DELETE_MANY_TODOS_KEY';
 
 interface TodosState {
   todos: TodoResponseDto[];
+  selectedTodos: TodoResponseDto[];
 }
 
 const initialTodosState: TodosState = {
-  todos: [],
+  todos: Array<TodoResponseDto>(),
+  selectedTodos: Array<TodoResponseDto>(),
 };
 
 export const todosStore = signalStore(
@@ -193,7 +195,7 @@ export const todosStore = signalStore(
                     messageService.add({
                       severity: 'success',
                       summary: 'To-Dos Deleted',
-                      detail: `Deleted ${todos.length} to-dos`,
+                      detail: `Deleted ${todos.length} to-do(s)`,
                     });
                   },
                   error: (error: HttpErrorResponse): void => {

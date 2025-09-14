@@ -30,7 +30,7 @@ public class DeleteMultipleTodosDto
     [Required]
     [MinLength(1, ErrorMessage = "At least one todo ID must be provided")]
     [JsonPropertyName("todo_ids")]
-    [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue, ErrorMessage = "Each todo ID must be a non-negative integer")]
+    // [System.ComponentModel.DataAnnotations.Range(0, int.MaxValue, ErrorMessage = "Each todo ID must be a non-negative integer")]
     public int[] TodoIds { get; set; } = Array.Empty<int>();
 }
 
