@@ -13,6 +13,7 @@ public interface ITodoService
     Task<TodoResponseDto?> UpdateTodoAsync(int id, UpdateTodoDto updateTodoDto, int userId, string username);
     Task<bool> DeleteTodoAsync(int id, int userId, string username);
     Task<int> DeleteMultipleTodosAsync(int[] todoIds, int userId, string username);
+    Task<int> UpdateMultipleTodoStatusAsync(int[] todoIds, TodoStatus status, int userId, string username);
 }
 
 public class TodoService : ITodoService
@@ -140,5 +141,34 @@ public class TodoService : ITodoService
             $"Bulk deleted {todosToDelete.Count} todos: {string.Join(", ", deletedTodoTexts)}");
 
         return todosToDelete.Count;
+    }
+
+    public async Task<int> UpdateMultipleTodoStatusAsync(int[] todoIds, TodoStatus status, int userId, string username)
+    {
+        var todosToUpdate = await _context.Todos
+            .Where(t => todoIds.Contains(t.Id) && t.UserId == userId)
+            .ToListAsync();
+
+        if (!todosToUpdate.Any())
+            return 0;
+
+        foreach (var todo in todosToUpdate)
+        {
+            var oldStatus = todo.Status;
+            todo.Status = status;
+            todo.UpdatedAt = DateTime.UtcNow;
+            todo.CompletedAt = status == TodoStatus.Complete ? DateTime.UtcNow : null;
+        }
+
+        await _context.SaveChangesAsync();
+
+        // Log the action
+        await _actionLogService.CreateActionLogAsync(
+            username,
+            userId,
+            $"Bulk updated status for {todosToUpdate.Count} todos to '{status}' (IDs: {string.Join(", ", todosToUpdate.Select(t => t.Id))})"
+        );
+
+        return todosToUpdate.Count;
     }
 }

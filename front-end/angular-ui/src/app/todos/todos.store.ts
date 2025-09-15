@@ -15,6 +15,7 @@ import {
   DeleteMultipleTodosDto,
   TodoResponseDto,
   TodoStatus,
+  UpdateMultipleTodoStatusDto,
   UpdateTodoDto,
 } from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
@@ -212,12 +213,56 @@ export const todosStore = signalStore(
           }),
         ),
       );
+      const updateMultipleTodoStatus = rxMethod<{
+        todos: TodoResponseDto[];
+        status: TodoStatus;
+      }>(
+        pipe(
+          concatMap(({ todos, status }) => {
+            const updateTodosDto: UpdateMultipleTodoStatusDto = {
+              todo_ids: todos.map((t) => t.id),
+              status,
+            };
+            return todosService.updateMultipleTodoStatus(updateTodosDto).pipe(
+              tapResponse({
+                next: (): void => {
+                  const updatedTodos = store.todos().map((todo) => {
+                    if (todos.some((t) => t.id === todo.id)) {
+                      return { ...todo, status };
+                    }
+                    return todo;
+                  });
+                  patchState(store, {
+                    todos: updatedTodos,
+                  });
+
+                  messageService.add({
+                    severity: 'success',
+                    summary: 'To-Dos Updated',
+                    detail: `Updated ${updatedTodos.length} to-do(s)`,
+                  });
+                },
+                error: (error: HttpErrorResponse): void => {
+                  const friendlyMessage = `Error updating multiple to-dos.`;
+                  console.error(`${friendlyMessage} Details:`, error);
+                  messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: friendlyMessage,
+                  });
+                },
+              }),
+            );
+          }),
+        ),
+      );
       return {
         fetchTodos,
         createTodo,
         deleteTodo,
         updateTodo,
         deleteMultipleTodos,
+        updateMultipleTodoStatus,
       };
     },
   ),

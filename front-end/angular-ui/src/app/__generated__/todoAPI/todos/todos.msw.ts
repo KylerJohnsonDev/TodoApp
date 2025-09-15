@@ -262,6 +262,22 @@ export const getDeleteMultipleTodosMockHandler = (
     return new HttpResponse(null, { status: 200 });
   });
 };
+
+export const getUpdateMultipleTodoStatusMockHandler = (
+  overrideResponse?:
+    | null
+    | ((
+        info: Parameters<Parameters<typeof http.put>[1]>[0],
+      ) => Promise<null> | null),
+) => {
+  return http.put('*/api/todos/bulk-status', async (info) => {
+    await delay(1000);
+    if (typeof overrideResponse === 'function') {
+      await overrideResponse(info);
+    }
+    return new HttpResponse(null, { status: 200 });
+  });
+};
 export const getTodosMock = () => [
   getGetTodosMockHandler(),
   getCreateTodoMockHandler(),
@@ -269,4 +285,5 @@ export const getTodosMock = () => [
   getUpdateTodoMockHandler(),
   getDeleteTodoMockHandler(),
   getDeleteMultipleTodosMockHandler(),
+  getUpdateMultipleTodoStatusMockHandler(),
 ];

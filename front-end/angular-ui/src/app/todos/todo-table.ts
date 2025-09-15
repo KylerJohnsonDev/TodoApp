@@ -18,7 +18,6 @@ import {
   TodoStatus,
 } from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
-import { TodoTableMenuActions } from './todo.models';
 
 @Component({
   selector: 'app-todo-table',
@@ -125,9 +124,10 @@ export class TodoTable {
     todo: TodoResponseDto;
     type: 'complete' | 'reopen';
   }>();
-  readonly tableActionSelected = output<{
-    action: TodoTableMenuActions;
+  readonly deleteMultipleTodos = output<TodoResponseDto[]>();
+  readonly updateMultipleTodoStatus = output<{
     todos: TodoResponseDto[];
+    status: TodoStatus;
   }>();
   readonly TodoStatus = TodoStatus;
   readonly actionsMenuIcon = signal('pi pi-chevron-right');
@@ -137,7 +137,11 @@ export class TodoTable {
         label: 'Complete selected items',
         icon: 'pi pi-check',
         command: () => {
-          alert('Complete selected items');
+          this.updateMultipleTodoStatus.emit({
+            todos: this.selectedTodos(),
+            status: 'Complete',
+          });
+          this.selectedTodos.set([]);
         },
         disabled: this.selectedTodos().length === 0,
         tooltip:
@@ -147,7 +151,11 @@ export class TodoTable {
         label: 'Reopen selected items',
         icon: 'pi pi-undo',
         command: () => {
-          alert('Reopen selected items');
+          this.updateMultipleTodoStatus.emit({
+            todos: this.selectedTodos(),
+            status: 'Incomplete',
+          });
+          this.selectedTodos.set([]);
         },
         disabled: this.selectedTodos().length === 0,
         tooltip:
@@ -157,10 +165,7 @@ export class TodoTable {
         label: 'Delete selected items',
         icon: 'pi pi-trash',
         command: () => {
-          this.tableActionSelected.emit({
-            action: 'delete_many',
-            todos: this.selectedTodos(),
-          });
+          this.deleteMultipleTodos.emit(this.selectedTodos());
           this.selectedTodos.set([]);
         },
         disabled: this.selectedTodos().length === 0,

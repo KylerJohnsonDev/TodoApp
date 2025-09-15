@@ -35,11 +35,7 @@ export interface CreateTodoDto {
 }
 
 export interface DeleteMultipleTodosDto {
-  /**
-   * @minimum 0
-   * @maximum 2147483647
-   * @minItems 1
-   */
+  /** @minItems 1 */
   todo_ids: number[];
 }
 
@@ -100,6 +96,12 @@ export const TodoStatus = {
   InProgress: 'InProgress',
   Complete: 'Complete',
 } as const;
+
+export interface UpdateMultipleTodoStatusDto {
+  /** @minItems 1 */
+  todo_ids: number[];
+  status: TodoStatus;
+}
 
 export interface UpdateTodoDto {
   /**

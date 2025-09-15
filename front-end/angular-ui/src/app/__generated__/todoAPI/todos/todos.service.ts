@@ -21,6 +21,7 @@ import type {
   CreateTodoDto,
   DeleteMultipleTodosDto,
   TodoResponseDto,
+  UpdateMultipleTodoStatusDto,
   UpdateTodoDto,
 } from '../todoApi.schemas';
 
@@ -161,6 +162,28 @@ export class TodosService {
       ...options,
     });
   }
+  updateMultipleTodoStatus<TData = null>(
+    updateMultipleTodoStatusDto: UpdateMultipleTodoStatusDto,
+    options?: HttpClientOptions & { observe?: 'body' },
+  ): Observable<TData>;
+  updateMultipleTodoStatus<TData = null>(
+    updateMultipleTodoStatusDto: UpdateMultipleTodoStatusDto,
+    options?: HttpClientOptions & { observe: 'events' },
+  ): Observable<HttpEvent<TData>>;
+  updateMultipleTodoStatus<TData = null>(
+    updateMultipleTodoStatusDto: UpdateMultipleTodoStatusDto,
+    options?: HttpClientOptions & { observe: 'response' },
+  ): Observable<AngularHttpResponse<TData>>;
+  updateMultipleTodoStatus<TData = null>(
+    updateMultipleTodoStatusDto: UpdateMultipleTodoStatusDto,
+    options?: HttpClientOptions & { observe?: any },
+  ): Observable<any> {
+    return this.http.put<TData>(
+      `/api/todos/bulk-status`,
+      updateMultipleTodoStatusDto,
+      options,
+    );
+  }
 }
 
 export type GetTodosClientResult = NonNullable<TodoResponseDto[]>;
@@ -169,3 +192,4 @@ export type GetTodoByIdClientResult = NonNullable<TodoResponseDto>;
 export type UpdateTodoClientResult = NonNullable<TodoResponseDto>;
 export type DeleteTodoClientResult = never;
 export type DeleteMultipleTodosClientResult = never;
+export type UpdateMultipleTodoStatusClientResult = never;
