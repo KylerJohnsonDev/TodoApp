@@ -7,8 +7,8 @@ namespace TodoApi.ActionLogs;
 
 public interface IActionLogService
 {
-    Task<IEnumerable<ActionLogDto>> GetActionLogsAsync(int userId);
-    Task<IEnumerable<ActionLogDto>> GetAllActionLogsAsync();
+    Task<(IEnumerable<ActionLogDto> Logs, int TotalCount)> GetActionLogsAsync(int userId, int page, int pageSize);
+    Task<(IEnumerable<ActionLogDto> Logs, int TotalCount)> GetAllActionLogsAsync(int page, int pageSize);
     Task<ActionLogDto> CreateActionLogAsync(string username, int userId, string action);
 }
 
@@ -21,11 +21,16 @@ public class ActionLogService : IActionLogService
         _context = context;
     }
 
-    public async Task<IEnumerable<ActionLogDto>> GetActionLogsAsync(int userId)
+    public async Task<(IEnumerable<ActionLogDto> Logs, int TotalCount)> GetActionLogsAsync(int userId, int page, int pageSize)
     {
-        var actionLogs = await _context.ActionLogs
+        var query = _context.ActionLogs
             .Where(a => a.UserId == userId)
-            .OrderByDescending(a => a.Timestamp)
+            .OrderByDescending(a => a.Timestamp);
+
+        var totalCount = await query.CountAsync();
+        var logs = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(a => new ActionLogDto
             {
                 Id = a.Id,
@@ -35,13 +40,18 @@ public class ActionLogService : IActionLogService
             })
             .ToListAsync();
 
-        return actionLogs;
+        return (logs, totalCount);
     }
 
-    public async Task<IEnumerable<ActionLogDto>> GetAllActionLogsAsync()
+    public async Task<(IEnumerable<ActionLogDto> Logs, int TotalCount)> GetAllActionLogsAsync(int page, int pageSize)
     {
-        var actionLogs = await _context.ActionLogs
-            .OrderByDescending(a => a.Timestamp)
+        var query = _context.ActionLogs
+            .OrderByDescending(a => a.Timestamp);
+
+        var totalCount = await query.CountAsync();
+        var logs = await query
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
             .Select(a => new ActionLogDto
             {
                 Id = a.Id,
@@ -51,7 +61,7 @@ public class ActionLogService : IActionLogService
             })
             .ToListAsync();
 
-        return actionLogs;
+        return (logs, totalCount);
     }
 
     public async Task<ActionLogDto> CreateActionLogAsync(string username, int userId, string action)

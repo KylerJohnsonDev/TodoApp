@@ -31,21 +31,12 @@ public class ActionLogsController : ControllerBase
             return Unauthorized();
         }
 
-        // Service will be updated to support pagination in next step
-        var allLogs = await _actionLogService.GetActionLogsAsync(userId);
-        var totalCount = allLogs.Count();
-        var pagedLogs = allLogs.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var (logs, totalCount) = await _actionLogService.GetActionLogsAsync(userId, page, pageSize);
         var isLastPage = (page * pageSize) >= totalCount;
 
         var response = new ActionLogsResponseDto
         {
-            ActionLogs = pagedLogs.Select(log => new ActionLogDto
-            {
-                Id = log.Id,
-                Username = log.Username,
-                Timestamp = log.Timestamp,
-                Action = log.Action
-            }).ToList(),
+            ActionLogs = logs.ToList(),
             TotalCount = totalCount,
             IsLastPage = isLastPage
         };
@@ -60,20 +51,12 @@ public class ActionLogsController : ControllerBase
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)
     {
-        var allLogs = await _actionLogService.GetAllActionLogsAsync();
-        var totalCount = allLogs.Count();
-        var pagedLogs = allLogs.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+        var (logs, totalCount) = await _actionLogService.GetAllActionLogsAsync(page, pageSize);
         var isLastPage = (page * pageSize) >= totalCount;
 
         var response = new ActionLogsResponseDto
         {
-            ActionLogs = pagedLogs.Select(log => new ActionLogDto
-            {
-                Id = log.Id,
-                Username = log.Username,
-                Timestamp = log.Timestamp,
-                Action = log.Action
-            }).ToList(),
+            ActionLogs = logs.ToList(),
             TotalCount = totalCount,
             IsLastPage = isLastPage
         };
