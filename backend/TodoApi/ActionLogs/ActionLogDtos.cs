@@ -1,30 +1,41 @@
 using System.ComponentModel.DataAnnotations;
-
-namespace TodoApi.ActionLogs;
-
 using System.Text.Json.Serialization;
-using System.ComponentModel.DataAnnotations;
 
-public class ActionLogResponseDto
+namespace TodoApi.ActionLogs
 {
-    [Range(0, int.MaxValue)]
-    [JsonPropertyName("id")]
-    public int Id { get; set; }
+    public class ActionLogsResponseDto
+    {
+        [JsonPropertyName("action_logs")]
+        public List<ActionLogDto> ActionLogs { get; set; } = new();
 
-    [JsonPropertyName("username")]
-    public string Username { get; set; } = string.Empty;
+        [JsonPropertyName("total_count")]
+        public int TotalCount { get; set; }
 
-    [JsonPropertyName("timestamp")]
-    public DateTime Timestamp { get; set; }
+        [JsonPropertyName("is_last_page")]
+        public bool IsLastPage { get; set; }
+    }
 
-    [JsonPropertyName("action")]
-    public string Action { get; set; } = string.Empty;
-}
+    public class ActionLogDto
+    {
+        [Range(0, int.MaxValue)]
+        [JsonPropertyName("id")]
+        public int Id { get; set; }
 
-public class CreateActionLogDto
-{
-    [Required]
-    [StringLength(500, MinimumLength = 1)]
-    [JsonPropertyName("action")]
-    public string Action { get; set; } = string.Empty;
+        [JsonPropertyName("username")]
+        public string Username { get; set; } = string.Empty;
+
+        [JsonPropertyName("timestamp")]
+        public DateTime Timestamp { get; set; }
+
+        [JsonPropertyName("action")]
+        public string Action { get; set; } = string.Empty;
+    }
+
+    public class CreateActionLogDto
+    {
+        [Required]
+        [StringLength(500, MinimumLength = 1)]
+        [JsonPropertyName("action")]
+        public string Action { get; set; } = string.Empty;
+    }
 }

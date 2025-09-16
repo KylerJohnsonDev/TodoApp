@@ -7,9 +7,9 @@ namespace TodoApi.ActionLogs;
 
 public interface IActionLogService
 {
-    Task<IEnumerable<ActionLogResponseDto>> GetActionLogsAsync(int userId);
-    Task<IEnumerable<ActionLogResponseDto>> GetAllActionLogsAsync();
-    Task<ActionLogResponseDto> CreateActionLogAsync(string username, int userId, string action);
+    Task<IEnumerable<ActionLogDto>> GetActionLogsAsync(int userId);
+    Task<IEnumerable<ActionLogDto>> GetAllActionLogsAsync();
+    Task<ActionLogDto> CreateActionLogAsync(string username, int userId, string action);
 }
 
 public class ActionLogService : IActionLogService
@@ -21,12 +21,12 @@ public class ActionLogService : IActionLogService
         _context = context;
     }
 
-    public async Task<IEnumerable<ActionLogResponseDto>> GetActionLogsAsync(int userId)
+    public async Task<IEnumerable<ActionLogDto>> GetActionLogsAsync(int userId)
     {
         var actionLogs = await _context.ActionLogs
             .Where(a => a.UserId == userId)
             .OrderByDescending(a => a.Timestamp)
-            .Select(a => new ActionLogResponseDto
+            .Select(a => new ActionLogDto
             {
                 Id = a.Id,
                 Username = a.Username,
@@ -38,11 +38,11 @@ public class ActionLogService : IActionLogService
         return actionLogs;
     }
 
-    public async Task<IEnumerable<ActionLogResponseDto>> GetAllActionLogsAsync()
+    public async Task<IEnumerable<ActionLogDto>> GetAllActionLogsAsync()
     {
         var actionLogs = await _context.ActionLogs
             .OrderByDescending(a => a.Timestamp)
-            .Select(a => new ActionLogResponseDto
+            .Select(a => new ActionLogDto
             {
                 Id = a.Id,
                 Username = a.Username,
@@ -54,7 +54,7 @@ public class ActionLogService : IActionLogService
         return actionLogs;
     }
 
-    public async Task<ActionLogResponseDto> CreateActionLogAsync(string username, int userId, string action)
+    public async Task<ActionLogDto> CreateActionLogAsync(string username, int userId, string action)
     {
         var actionLog = new ActionLog
         {
@@ -67,7 +67,7 @@ public class ActionLogService : IActionLogService
         _context.ActionLogs.Add(actionLog);
         await _context.SaveChangesAsync();
 
-        return new ActionLogResponseDto
+        return new ActionLogDto
         {
             Id = actionLog.Id,
             Username = actionLog.Username,
