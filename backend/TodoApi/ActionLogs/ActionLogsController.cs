@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using TodoApi.ActionLogs;
 
@@ -21,9 +23,10 @@ public class ActionLogsController : ControllerBase
     /// Get all action logs for the current user (paginated)
     /// </summary>
     [HttpGet]
+    [SwaggerOperation(OperationId = "GetUserActionLogs")]
     public async Task<ActionResult<ActionLogsResponseDto>> GetUserActionLogs(
-        [FromQuery] int page = 1,
-        [FromQuery] int pageSize = 20)
+        [FromQuery, SwaggerParameter("Page number", Required = false)] int page = 1,
+        [FromQuery, SwaggerParameter("Page size", Required = false)] int pageSize = 20)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
@@ -47,6 +50,8 @@ public class ActionLogsController : ControllerBase
     /// Get all action logs from all users (admin endpoint, paginated)
     /// </summary>
     [HttpGet("all")]
+    [Authorize(Roles = "Admin")]
+    [SwaggerOperation(OperationId = "GetAllActionLogs")]
     public async Task<ActionResult<ActionLogsResponseDto>> GetAllActionLogs(
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)

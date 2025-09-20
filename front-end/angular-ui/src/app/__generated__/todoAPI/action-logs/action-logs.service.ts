@@ -15,7 +15,15 @@ import type {
 
 import { Injectable, inject } from '@angular/core';
 
+import type { DeepNonNullable } from '@orval/core/src/utils/deep-non-nullable';
+
 import { Observable } from 'rxjs';
+
+import type {
+  ActionLogsResponseDto,
+  GetAllActionLogsParams,
+  GetUserActionLogsParams,
+} from '../todoApi.schemas';
 
 interface HttpClientOptions {
   headers?: HttpHeaders | Record<string, string | string[]>;
@@ -43,35 +51,49 @@ interface HttpClientOptions {
 @Injectable({ providedIn: 'root' })
 export class ActionLogsService {
   private readonly http = inject(HttpClient);
-  getApiActionLogs<TData = null>(
+  getUserActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetUserActionLogsParams>,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getApiActionLogs<TData = null>(
+  getUserActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetUserActionLogsParams>,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getApiActionLogs<TData = null>(
+  getUserActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetUserActionLogsParams>,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getApiActionLogs<TData = null>(
+  getUserActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetUserActionLogsParams>,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/action_logs`, options);
+    return this.http.get<TData>(`/api/action_logs`, {
+      ...options,
+      params: { ...params, ...options?.params },
+    });
   }
-  getApiActionLogsAll<TData = null>(
+  getAllActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetAllActionLogsParams>,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
-  getApiActionLogsAll<TData = null>(
+  getAllActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetAllActionLogsParams>,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
-  getApiActionLogsAll<TData = null>(
+  getAllActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetAllActionLogsParams>,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
-  getApiActionLogsAll<TData = null>(
+  getAllActionLogs<TData = ActionLogsResponseDto>(
+    params?: DeepNonNullable<GetAllActionLogsParams>,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
-    return this.http.get<TData>(`/api/action_logs/all`, options);
+    return this.http.get<TData>(`/api/action_logs/all`, {
+      ...options,
+      params: { ...params, ...options?.params },
+    });
   }
 }
 
-export type GetApiActionLogsClientResult = never;
-export type GetApiActionLogsAllClientResult = never;
+export type GetUserActionLogsClientResult = NonNullable<ActionLogsResponseDto>;
+export type GetAllActionLogsClientResult = NonNullable<ActionLogsResponseDto>;

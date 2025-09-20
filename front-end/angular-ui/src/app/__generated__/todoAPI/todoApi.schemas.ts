@@ -4,6 +4,26 @@
  * TodoApi
  * OpenAPI spec version: v1
  */
+export interface ActionLogDto {
+  /**
+   * @minimum 0
+   * @maximum 2147483647
+   */
+  id?: number;
+  /** @nullable */
+  username?: string | null;
+  timestamp?: string;
+  /** @nullable */
+  action?: string | null;
+}
+
+export interface ActionLogsResponseDto {
+  /** @nullable */
+  action_logs?: ActionLogDto[] | null;
+  total_count?: number;
+  is_last_page?: boolean;
+}
+
 export interface AuthResponseDto {
   /** @nullable */
   token?: string | null;
@@ -122,3 +142,19 @@ export interface UserDto {
   created_at?: string;
   updated_at?: string;
 }
+
+export type GetUserActionLogsParams = {
+  /**
+   * Page number
+   */
+  page?: number;
+  /**
+   * Page size
+   */
+  pageSize?: number;
+};
+
+export type GetAllActionLogsParams = {
+  page?: number;
+  pageSize?: number;
+};

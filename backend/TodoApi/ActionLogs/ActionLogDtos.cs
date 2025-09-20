@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 
 namespace TodoApi.ActionLogs
@@ -37,5 +38,16 @@ namespace TodoApi.ActionLogs
         [StringLength(500, MinimumLength = 1)]
         [JsonPropertyName("action")]
         public string Action { get; set; } = string.Empty;
+    }
+
+    public class ActionLogQueryParameters
+    {
+        // [Range(1, int.MaxValue)]
+        [JsonPropertyName("page")]
+        public int? Page { get; set; } = 1;
+
+        // [Range(1, 100)]
+        [JsonPropertyName("page_size")]
+        public int? PageSize { get; set; } = 20;
     }
 }

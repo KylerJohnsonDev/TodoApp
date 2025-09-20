@@ -84,59 +84,59 @@ export class TodosService {
     return this.http.post<TData>(`/api/todos`, createTodoDto, options);
   }
   getTodoById<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
   getTodoById<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
   getTodoById<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
   getTodoById<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.get<TData>(`/api/todos/${id}`, options);
   }
   updateTodo<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     updateTodoDto: UpdateTodoDto,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
   updateTodo<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     updateTodoDto: UpdateTodoDto,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
   updateTodo<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     updateTodoDto: UpdateTodoDto,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
   updateTodo<TData = TodoResponseDto>(
-    id: number,
+    id: number | undefined | null,
     updateTodoDto: UpdateTodoDto,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.put<TData>(`/api/todos/${id}`, updateTodoDto, options);
   }
   deleteTodo<TData = null>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe?: 'body' },
   ): Observable<TData>;
   deleteTodo<TData = null>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe: 'events' },
   ): Observable<HttpEvent<TData>>;
   deleteTodo<TData = null>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe: 'response' },
   ): Observable<AngularHttpResponse<TData>>;
   deleteTodo<TData = null>(
-    id: number,
+    id: number | undefined | null,
     options?: HttpClientOptions & { observe?: any },
   ): Observable<any> {
     return this.http.delete<TData>(`/api/todos/${id}`, options);

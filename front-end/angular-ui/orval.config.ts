@@ -20,6 +20,7 @@ export default defineConfig({
         theme: '',
       },
       mock: true,
+      allParamsOptional: true,
       override: {
         operations: {
           GetTodos: {
@@ -35,6 +36,7 @@ export default defineConfig({
               },
             },
           },
+          GetUserActionLogs: {},
         },
       },
     },
