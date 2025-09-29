@@ -8,19 +8,20 @@ export default defineConfig({
     input: {
       target: 'http://localhost:5000/swagger/v1/swagger.json',
       validation: false,
+      parserOptions: {
+        resolve: {
+          http: {
+            canRead: /http:/,
+          },
+        },
+      },
     },
     output: {
       mode: 'tags-split',
       target: 'src/app/__generated__/todoAPI',
       namingConvention: 'kebab-case',
       client: 'angular',
-      docs: {
-        out: './docs-markdown',
-        disableSources: true,
-        theme: '',
-      },
       mock: true,
-      allParamsOptional: true,
       override: {
         operations: {
           GetTodos: {

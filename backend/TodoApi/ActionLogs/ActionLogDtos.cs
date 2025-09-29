@@ -40,14 +40,4 @@ namespace TodoApi.ActionLogs
         public string Action { get; set; } = string.Empty;
     }
 
-    public class ActionLogQueryParameters
-    {
-        // [Range(1, int.MaxValue)]
-        [JsonPropertyName("page")]
-        public int? Page { get; set; } = 1;
-
-        // [Range(1, 100)]
-        [JsonPropertyName("page_size")]
-        public int? PageSize { get; set; } = 20;
-    }
 }

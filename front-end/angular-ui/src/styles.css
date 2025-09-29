@@ -6,3 +6,7 @@
 html, body, app-root {
   height: 100%;
 }
+
+.p-datatable-scrollable-wrapper {
+  min-height: 0;
+}

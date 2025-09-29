@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
 import TodosGrid from '../components/TodosGrid';
-import { useGetApiTodos } from '../__generated__/todos/todos';
 
 export const Route = createFileRoute('/')({
   component: Index,
@@ -8,8 +7,8 @@ export const Route = createFileRoute('/')({
 
 function Index() {
 
- const query = useGetApiTodos();
- console.log('query', query);
+//  const query = useGetApiTodos();
+//  console.log('query', query);
 
   return (
     <div className="p-2">

@@ -19,7 +19,7 @@ export const routes: Routes = [
       { path: 'todos', loadComponent: () => import('./todos/todos-page') },
       {
         path: 'action-logs',
-        loadComponent: () => import('./pages/protected/action-logs'),
+        loadComponent: () => import('./action-logs/action-logs-page'),
       },
       {
         path: 'account',

@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/login')({
-  component: RouteComponent,
+  component: LoginPage,
 });
 
-function RouteComponent() {
+function LoginPage() {
   return (
     <>
       <section className="bg-gray-50 dark:bg-gray-900">
