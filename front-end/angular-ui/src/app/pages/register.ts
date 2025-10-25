@@ -23,50 +23,56 @@ import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
   ],
   template: `
     <mat-card class="w-full md:w-96">
-      <ng-template #title>Create Account</ng-template>
-      <ng-template #subtitle>Welcome to TodoApp!</ng-template>
-      <div class="my-4">
-        <mat-form-field class="mb-4">
-          <mat-label>Username</mat-label>
-          <input matInput [(ngModel)]="username" placeholder="Username" />
-        </mat-form-field>
-        <mat-form-field class="mb-4">
-          <mat-label>Email</mat-label>
-          <input matInput [(ngModel)]="userEmail" placeholder="Email" />
-        </mat-form-field>
-        <mat-form-field class="mb-4">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [(ngModel)]="password"
-            placeholder="Password"
-            type="password"
-          />
-        </mat-form-field>
-        <mat-form-field class="mb-4">
-          <mat-label>Confirm Password</mat-label>
-          <input
-            matInput
-            [(ngModel)]="confirmPassword"
-            placeholder="Confirm Password"
-            type="password"
-          />
-        </mat-form-field>
-      </div>
-      <ng-template #footer>
+      <mat-card-header>
+        <mat-card-title-group>
+          <mat-card-title>
+            <h2>Register</h2>
+          </mat-card-title>
+          <mat-card-subtitle>Welcome to Taskify!</mat-card-subtitle>
+        </mat-card-title-group>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="my-4">
+          <mat-form-field class="w-full">
+            <mat-label>Username</mat-label>
+            <input matInput [(ngModel)]="username" placeholder="Username" />
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Email</mat-label>
+            <input matInput [(ngModel)]="userEmail" placeholder="Email" />
+          </mat-form-field>
+          <mat-form-field class="w-full ">
+            <mat-label>Password</mat-label>
+            <input
+              matInput
+              [(ngModel)]="password"
+              placeholder="Password"
+              type="password"
+            />
+          </mat-form-field>
+          <mat-form-field class="w-full">
+            <mat-label>Confirm Password</mat-label>
+            <input
+              matInput
+              [(ngModel)]="confirmPassword"
+              placeholder="Confirm Password"
+              type="password"
+            />
+          </mat-form-field>
+        </div>
+      </mat-card-content>
+      <mat-card-footer>
         <div class="flex flex-col items-center">
-          <button mat-icon-button (click)="createAccount()">
+          <button mat-flat-button (click)="createAccount()">
             <mat-icon>person_add</mat-icon>
             Create Account
           </button>
           <p class="pt-4">
             Already have an account?
-            <a class="text-primary hover:underline" [routerLink]="['/login']"
-              >Sign In</a
-            >
+            <a mat-button [routerLink]="['/login']">Sign In</a>
           </p>
         </div>
-      </ng-template>
+      </mat-card-footer>
     </mat-card>
   `,
   styles: ``,

@@ -36,10 +36,17 @@ import { authStore } from '../utils/auth-store';
 
     <mat-menu #profileMenu="matMenu">
       @for (item of menuItems; track item.label) {
-        <button mat-menu-item>
-          <mat-icon [fontIcon]="item.icon" />
-          <span>{{ item.label }}</span>
-        </button>
+        @if (item.routerLink) {
+          <a mat-menu-item [routerLink]="item.routerLink">
+            <mat-icon [fontIcon]="item.icon" />
+            <span>{{ item.label }}</span>
+          </a>
+        } @else {
+          <button mat-menu-item (click)="item.command?.()">
+            <mat-icon [fontIcon]="item.icon" />
+            <span>{{ item.label }}</span>
+          </button>
+        }
       }
     </mat-menu>
   `,
