@@ -1,12 +1,8 @@
-@import "tailwindcss";
-@plugin "tailwindcss-primeui";
-@import "primeicons/primeicons.css";
-@custom-variant dark (&:where(.dark, .dark *));
 
-html, body, app-root {
-  height: 100%;
+@layer base {
+  @import "tailwindcss";
+  /* @custom-variant dark (&:where(.dark, .dark *)); */
 }
 
-.p-datatable-scrollable-wrapper {
-  min-height: 0;
-}
+  html, body, app-root { height: 100%; }
+  body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

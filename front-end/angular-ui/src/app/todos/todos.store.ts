@@ -6,10 +6,10 @@ import {
 } from '@angular-architects/ngrx-toolkit';
 import { HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { MessageService } from 'primeng/api';
 import { concatMap, pipe, switchMap } from 'rxjs';
 import {
   DeleteMultipleTodosDto,
@@ -49,7 +49,7 @@ export const todosStore = signalStore(
     (
       store,
       todosService = inject(TodosService),
-      messageService = inject(MessageService),
+      snackbar = inject(MatSnackBar),
     ) => {
       const fetchTodos = rxMethod<void>(
         pipe(
@@ -83,10 +83,8 @@ export const todosStore = signalStore(
                   patchState(store, setLoaded(CREATE_TODO_KEY), {
                     todos: currentTodos,
                   });
-                  messageService.add({
-                    severity: 'success',
-                    summary: 'To-Do Created',
-                    detail: `Created to-do "${newTodo.text}"`,
+                  snackbar.open(`Created to-do "${newTodo.text}"`, 'Close', {
+                    duration: 3000,
                   });
                 },
                 error: (error: HttpErrorResponse): void => {
@@ -111,19 +109,15 @@ export const todosStore = signalStore(
                   patchState(store, setLoaded(DELETE_TODO_KEY), {
                     todos: currentTodos,
                   });
-                  messageService.add({
-                    severity: 'success',
-                    summary: 'To-Do Deleted',
-                    detail: `Deleted to-do "${todo.text}"`,
+                  snackbar.open(`Deleted to-do "${todo.text}"`, 'Close', {
+                    duration: 3000,
                   });
                 },
                 error: (error: HttpErrorResponse): void => {
                   const friendlyMessage = `Error deleting todo "${todo.text}".`;
                   console.error(`${friendlyMessage} Details:`, error);
-                  messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: friendlyMessage,
+                  snackbar.open(friendlyMessage, 'Close', {
+                    duration: 3000,
                   });
                 },
               }),
@@ -156,19 +150,19 @@ export const todosStore = signalStore(
                     todos: currentTodos,
                   });
 
-                  messageService.add({
-                    severity: 'success',
-                    summary: 'To-Do Updated',
-                    detail: `${type === 'complete' ? 'Completed' : 'Reopened'} to-do "${updatedTodo.text}"`,
-                  });
+                  snackbar.open(
+                    `${type === 'complete' ? 'Completed' : 'Reopened'} to-do "${updatedTodo.text}"`,
+                    'Close',
+                    {
+                      duration: 3000,
+                    },
+                  );
                 },
                 error: (error: HttpErrorResponse): void => {
                   const friendlyMessage = `Error updating todo "${todo.text}".`;
                   console.error(`${friendlyMessage} Details:`, error);
-                  messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: friendlyMessage,
+                  snackbar.open(friendlyMessage, 'Close', {
+                    duration: 3000,
                   });
                 },
               }),
@@ -193,19 +187,15 @@ export const todosStore = signalStore(
                     patchState(store, setLoaded(DELETE_TODO_KEY), {
                       todos: currentTodos,
                     });
-                    messageService.add({
-                      severity: 'success',
-                      summary: 'To-Dos Deleted',
-                      detail: `Deleted ${todos.length} to-do(s)`,
+                    snackbar.open(`Deleted ${todos.length} to-do(s)`, 'Close', {
+                      duration: 3000,
                     });
                   },
                   error: (error: HttpErrorResponse): void => {
                     const friendlyMessage = `Error deleting multiple to-dos.`;
                     console.error(`${friendlyMessage} Details:`, error);
-                    messageService.add({
-                      severity: 'error',
-                      summary: 'Error',
-                      detail: friendlyMessage,
+                    snackbar.open(friendlyMessage, 'Close', {
+                      duration: 3000,
                     });
                   },
                 }),
@@ -236,19 +226,19 @@ export const todosStore = signalStore(
                     todos: updatedTodos,
                   });
 
-                  messageService.add({
-                    severity: 'success',
-                    summary: 'To-Dos Updated',
-                    detail: `Updated ${updatedTodos.length} to-do(s)`,
-                  });
+                  snackbar.open(
+                    `Updated ${updatedTodos.length} to-do(s)`,
+                    'Close',
+                    {
+                      duration: 3000,
+                    },
+                  );
                 },
                 error: (error: HttpErrorResponse): void => {
                   const friendlyMessage = `Error updating multiple to-dos.`;
                   console.error(`${friendlyMessage} Details:`, error);
-                  messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: friendlyMessage,
+                  snackbar.open(friendlyMessage, 'Close', {
+                    duration: 3000,
                   });
                 },
               }),

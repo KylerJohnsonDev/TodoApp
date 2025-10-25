@@ -26,6 +26,7 @@ interface ActionLogsState {
   actionLogsResponse: ActionLogsResponseDto;
   page: number;
   pageSize: number;
+  pageSizeOptions: number[];
 }
 
 const initialActionLogsState: ActionLogsState = {
@@ -35,7 +36,8 @@ const initialActionLogsState: ActionLogsState = {
     is_last_page: true,
   },
   page: 1,
-  pageSize: 50,
+  pageSize: 25,
+  pageSizeOptions: [25, 50, 100],
 };
 
 export const actionLogsStore = signalStore(

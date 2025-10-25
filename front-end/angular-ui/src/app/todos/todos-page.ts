@@ -4,21 +4,28 @@ import {
   effect,
   inject,
 } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
 import { TodoForm } from './todo-form';
-import { TodoTable } from './todo-table';
+import { TodoList } from './todo-list';
 import { todosStore } from './todos.store';
 
 @Component({
   selector: 'app-todos',
-  imports: [TodoTable, TodoForm],
+  imports: [TodoList, TodoForm, MatCardModule],
   template: `
-    <app-todo-form
-      [isLoading]="store.CREATE_TODO_KEYLoading()"
-      (submitNewTodo)="store.createTodo($event)"
-    />
-
-    <app-todo-table
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Add New Task</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="mt-4">
+        <app-todo-form
+          [isLoading]="store.CREATE_TODO_KEYLoading()"
+          (submitNewTodo)="store.createTodo($event)"
+        />
+      </mat-card-content>
+    </mat-card>
+    <app-todo-list
       [todos]="store.todos()"
       (deleteTodo)="store.deleteTodo($event)"
       (updateTodo)="store.updateTodo($event)"

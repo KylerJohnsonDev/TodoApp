@@ -1,82 +1,64 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { PasswordModule } from 'primeng/password';
 import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
 import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
 
 @Component({
   selector: 'app-register',
   imports: [
-    CardModule,
-    IconFieldModule,
-    InputIconModule,
-    InputTextModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
     FormsModule,
-    PasswordModule,
-    ButtonModule,
     RouterLink,
+    MatButtonModule,
+    MatIconButton,
   ],
   template: `
-    <p-card class="w-full md:w-96">
+    <mat-card class="w-full md:w-96">
       <ng-template #title>Create Account</ng-template>
       <ng-template #subtitle>Welcome to TodoApp!</ng-template>
       <div class="my-4">
-        <p-iconfield class="mb-4">
+        <mat-form-field class="mb-4">
+          <mat-label>Username</mat-label>
+          <input matInput [(ngModel)]="username" placeholder="Username" />
+        </mat-form-field>
+        <mat-form-field class="mb-4">
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="userEmail" placeholder="Email" />
+        </mat-form-field>
+        <mat-form-field class="mb-4">
+          <mat-label>Password</mat-label>
           <input
-            id="username"
-            class="w-full"
-            pInputText
-            [(ngModel)]="username"
-            placeholder="Username"
-            pSize="large"
+            matInput
+            [(ngModel)]="password"
+            placeholder="Password"
+            type="password"
           />
-          <p-inputicon class="pi pi-user" />
-        </p-iconfield>
-        <p-iconfield class="mb-4">
+        </mat-form-field>
+        <mat-form-field class="mb-4">
+          <mat-label>Confirm Password</mat-label>
           <input
-            id="email"
-            class="w-full"
-            pInputText
-            [(ngModel)]="userEmail"
-            placeholder="Email"
-            pSize="large"
+            matInput
+            [(ngModel)]="confirmPassword"
+            placeholder="Confirm Password"
+            type="password"
           />
-          <p-inputicon class="pi pi-envelope" />
-        </p-iconfield>
-
-        <p-password
-          id="password"
-          class="w-full mb-4"
-          [(ngModel)]="password"
-          [toggleMask]="true"
-          size="large"
-          placeholder="Password"
-          inputStyleClass="w-full"
-        />
-
-        <p-password
-          id="confirmPassword"
-          class="w-full"
-          [(ngModel)]="confirmPassword"
-          [toggleMask]="true"
-          size="large"
-          placeholder="Confirm Password"
-          inputStyleClass="w-full"
-        />
+        </mat-form-field>
       </div>
       <ng-template #footer>
         <div class="flex flex-col items-center">
-          <p-button
-            label="Create Account"
-            icon="pi pi-sign-in"
-            (click)="createAccount()"
-          />
+          <button mat-icon-button (click)="createAccount()">
+            <mat-icon>person_add</mat-icon>
+            Create Account
+          </button>
           <p class="pt-4">
             Already have an account?
             <a class="text-primary hover:underline" [routerLink]="['/login']"
@@ -85,7 +67,7 @@ import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
           </p>
         </div>
       </ng-template>
-    </p-card>
+    </mat-card>
   `,
   styles: ``,
   host: {

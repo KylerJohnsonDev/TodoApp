@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { MessageService } from 'primeng/api';
 import { catchError, concatMap, of, pipe, switchMap, tap } from 'rxjs';
 import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
 import {
@@ -31,7 +31,7 @@ export const authStore = signalStore(
     (
       store,
       authService = inject(AuthService),
-      messageService = inject(MessageService),
+      snackbar = inject(MatSnackBar),
       router = inject(Router),
     ) => {
       const register = rxMethod<RegisterDto>(
@@ -53,12 +53,14 @@ export const authStore = signalStore(
                   error: 'Registration failed',
                   loading: false,
                 });
-                messageService.add({
-                  key: 'bc',
-                  severity: 'error',
-                  summary: 'Registration Failed',
-                  detail: 'Please try again later.',
-                });
+                snackbar.open(
+                  'Registration Failed',
+                  'Please try again later.',
+                  {
+                    duration: 3000,
+                    panelClass: ['error-snackbar'],
+                  },
+                );
                 return of([]);
               }),
             );
@@ -83,10 +85,9 @@ export const authStore = signalStore(
                   errorResponse?.error?.message ??
                   'Unable to authenticate. Please try again later.';
                 patchState(store, { error: errorMessage, loading: false });
-                messageService.add({
-                  severity: 'error',
-                  summary: 'Login Failed',
-                  detail: errorMessage,
+                snackbar.open(errorMessage, 'Login Failed', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar'],
                 });
                 return of([]);
               }),
@@ -99,10 +100,9 @@ export const authStore = signalStore(
           tap(() => {
             localStorage.removeItem('authToken');
             patchState(store, { ...initialAuthState });
-            messageService.add({
-              severity: 'info',
-              summary: 'Goodbye',
-              detail: 'You have been logged out successfully.',
+            snackbar.open('Goodbye', 'You have been logged out successfully.', {
+              duration: 3000,
+              panelClass: ['info-snackbar'],
             });
             router.navigate(['/login']);
           }),

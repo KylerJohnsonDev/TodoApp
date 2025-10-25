@@ -15,9 +15,6 @@ import {
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
-import Aura from '@primeuix/themes/aura';
-import { MessageService } from 'primeng/api';
-import { providePrimeNG } from 'primeng/config';
 import { filter, take } from 'rxjs';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { routes } from './app.routes';
@@ -26,16 +23,10 @@ import { authStore } from './utils/auth-store';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideAnimationsAsync(),
-    providePrimeNG({
-      theme: {
-        preset: Aura,
-      },
-    }),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
     provideRouter(routes),
     provideHttpClient(withInterceptorsFromDi()),
-    MessageService,
     importProvidersFrom(
       JwtModule.forRoot({
         config: {

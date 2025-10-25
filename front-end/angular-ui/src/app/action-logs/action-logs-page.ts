@@ -16,9 +16,14 @@ import { actionLogsStore } from './action-logs.store';
       [actionLogs]="actionLogsStore.actionLogs()"
       [page]="actionLogsStore.page()"
       [pageSize]="actionLogsStore.pageSize()"
+      [pageSizeOptions]="actionLogsStore.pageSizeOptions()"
     />
   `,
-  styles: ``,
+  styles: `
+    :host {
+      flex: 1;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ActionLogsService, actionLogsStore],
 })
