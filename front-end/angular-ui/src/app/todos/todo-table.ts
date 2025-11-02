@@ -1,4 +1,5 @@
 import { SelectionModel } from '@angular/cdk/collections';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -25,6 +26,7 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 @Component({
   selector: 'app-todo-table',
   imports: [
+    CommonModule,
     MatCardModule,
     MatTableModule,
     MatCheckboxModule,
@@ -34,6 +36,35 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
     MatDialogModule,
     MatTooltipModule,
   ],
+  styles: [`
+    .table-container {
+      max-height: 500px;
+      overflow: auto;
+      border-radius: 8px;
+    }
+    
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .status-complete {
+      background-color: #dcfce7;
+      color: #166534;
+      border: 1px solid #bbf7d0;
+    }
+    
+    .status-incomplete,
+    .status-inprogress {
+      background-color: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+  `],
   template: `
     <mat-card>
       <mat-card-header class="flex justify-between gap-2 items-center mb-2">
@@ -57,11 +88,12 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
         </mat-menu>
       </mat-card-header>
       <mat-card-content>
-        <table
-          mat-table
-          [dataSource]="todoTableDataSource()"
-          class="mat-elevation-z8"
-        >
+        <div class="table-container">
+          <table
+            mat-table
+            [dataSource]="todoTableDataSource()"
+            class="mat-elevation-z8"
+          >
           <!-- Checkbox Column -->
           <ng-container matColumnDef="select">
             <th mat-header-cell *matHeaderCellDef>
@@ -93,7 +125,18 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
           <!-- Status Column -->
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="status-badge"
+                [class]="{
+                  'status-incomplete': element.status === 'Incomplete',
+                  'status-inprogress': element.status === 'InProgress',
+                  'status-complete': element.status === 'Complete'
+                }"
+              >
+                {{ element.status }}
+              </span>
+            </td>
           </ng-container>
 
           <!-- Actions Column -->
@@ -141,7 +184,8 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
             *matRowDef="let row; columns: displayedColumns"
             (click)="selection().toggle(row)"
           ></tr>
-        </table>
+          </table>
+        </div>
       </mat-card-content>
     </mat-card>
   `,
