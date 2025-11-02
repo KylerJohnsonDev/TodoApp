@@ -6,13 +6,15 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
+import { Todo } from './todo';
 import { TodoForm } from './todo-form';
 import { TodoList } from './todo-list';
+import { TodoTable } from './todo-table';
 import { todosStore } from './todos.store';
 
 @Component({
   selector: 'app-todos',
-  imports: [TodoList, TodoForm, MatCardModule],
+  imports: [TodoList, TodoForm, MatCardModule, Todo, TodoTable],
   template: `
     <mat-card>
       <mat-card-header>
@@ -25,7 +27,7 @@ import { todosStore } from './todos.store';
         />
       </mat-card-content>
     </mat-card>
-    <app-todo-list
+    <app-todo-table
       [todos]="store.todos()"
       (deleteTodo)="store.deleteTodo($event)"
       (updateTodo)="store.updateTodo($event)"
@@ -46,6 +48,5 @@ import { todosStore } from './todos.store';
 })
 export default class TodosPage {
   readonly store = inject(todosStore);
-
   readonly fetchTodos = effect(() => this.store.fetchTodos());
 }

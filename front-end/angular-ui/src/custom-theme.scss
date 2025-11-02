@@ -12,6 +12,8 @@ html {
       color: (
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
+        warn: mat.$red-palette,
+        success: mat.$green-palette,
       ),
       typography: Roboto,
       density: 0,
@@ -34,4 +36,15 @@ body {
 
   // Reset the user agent margin.
   margin: 0;
+}
+
+:root {
+  .warn {
+    @include mat.fab-overrides(
+      (
+        container-color: orange,
+        container-elevation-shadow: -4px -4px 5px 0px rgba(0, 0, 0, 0.5),
+      )
+    );
+  }
 }

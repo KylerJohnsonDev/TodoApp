@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule, MatListOption } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -18,6 +19,7 @@ import {
   TodoStatus,
 } from '../__generated__/todoAPI/todoApi.schemas';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
+import { Todo } from './todo';
 import { todosStore } from './todos.store';
 
 @Component({
@@ -29,6 +31,8 @@ import { todosStore } from './todos.store';
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatDividerModule,
+    Todo,
   ],
   template: `
     <mat-card>
@@ -56,17 +60,14 @@ import { todosStore } from './todos.store';
         </mat-menu>
       </mat-card-header>
 
-      <mat-selection-list
-        #tasksList
-        [multiple]="true"
-        (selectionChange)="
-          onSelectionChange($event.source.selectedOptions.selected)
-        "
-      >
-        @for (todo of todos(); track todo.id) {
-          <mat-list-option [value]="todo">{{ todo.text }}</mat-list-option>
+      <mat-card-content>
+        @for (todo of todos(); track todo.id; let idx = $index) {
+          <app-todo [todo]="todo" />
+          @if (idx < todos().length - 1) {
+            <mat-divider></mat-divider>
+          }
         }
-      </mat-selection-list>
+      </mat-card-content>
     </mat-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

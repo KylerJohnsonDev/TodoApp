@@ -1,0 +1,208 @@
+import { SelectionModel } from '@angular/cdk/collections';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import {
+  TodoResponseDto,
+  TodoStatus,
+} from '../__generated__/todoAPI/todoApi.schemas';
+
+@Component({
+  selector: 'app-todo-table',
+  imports: [
+    MatCardModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
+  template: `
+    <mat-card>
+      <mat-card-header class="flex justify-between gap-2 items-center mb-2">
+        <mat-card-title>
+          <h3 class="text-2xl">
+            {{ todos().length }} Total
+            @if (selection().selected.length > 0) {
+              ({{ selection().selected.length }} Selected)
+            }
+          </h3>
+        </mat-card-title>
+        <button mat-flat-button [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
+          Actions
+        </button>
+        <mat-menu #menu="matMenu">
+          <button
+            mat-menu-item
+            (click)="deleteMultipleTodos.emit(selection().selected)"
+          >
+            <mat-icon>delete</mat-icon>
+            <span>Delete selected</span>
+          </button>
+        </mat-menu>
+      </mat-card-header>
+      <mat-card-content>
+        <table
+          mat-table
+          [dataSource]="todoTableDataSource()"
+          class="mat-elevation-z8"
+        >
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="$event ? toggleAllRows(isAllSelected()) : null"
+                [checked]="selection().hasValue() && isAllSelected()"
+                [indeterminate]="selection().hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()"
+              >
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? selection().toggle(row) : null"
+                [checked]="selection().isSelected(row)"
+                [aria-label]="checkboxLabel(row)"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
+
+          <!-- Text Column -->
+          <ng-container matColumnDef="text">
+            <th mat-header-cell *matHeaderCellDef>Task</th>
+            <td mat-cell *matCellDef="let element">{{ element.text }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">{{ element.status }}</td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex gap-2">
+                <button
+                  matMiniFab
+                  class="warn"
+                  (click)="onClickDeleteTodo($event, element)"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+                @if (
+                  element.status === 'Incomplete' ||
+                  element.status === 'InProgress'
+                ) {
+                  <button
+                    matMiniFab
+                    (click)="
+                      onClickUpdateTodoStatus($event, element, 'complete')
+                    "
+                  >
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                }
+                @if (element.status === 'Complete') {
+                  <button
+                    matMiniFab
+                    (click)="onClickUpdateTodoStatus($event, element, 'reopen')"
+                  >
+                    <mat-icon>replay</mat-icon>
+                  </button>
+                }
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="selection().toggle(row)"
+          ></tr>
+        </table>
+      </mat-card-content>
+    </mat-card>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class TodoTable {
+  readonly displayedColumns = ['select', 'text', 'status', 'actions'];
+  readonly todos = input.required<TodoResponseDto[]>();
+  readonly todoTableDataSource = computed(() => {
+    return new MatTableDataSource<TodoResponseDto>(this.todos());
+  });
+  readonly selection = signal<SelectionModel<TodoResponseDto>>(
+    new SelectionModel<TodoResponseDto>(true, []),
+  );
+  readonly deleteTodo = output<TodoResponseDto>();
+  readonly updateTodo = output<{
+    todo: TodoResponseDto;
+    type: 'complete' | 'reopen';
+  }>();
+  readonly deleteMultipleTodos = output<TodoResponseDto[]>();
+  readonly updateMultipleTodoStatus = output<{
+    todos: TodoResponseDto[];
+    status: TodoStatus;
+  }>();
+
+  readonly isAllSelected = computed(() => {
+    const numSelected = this.selection().selected.length;
+    const numRows = this.todoTableDataSource().data.length;
+    const isAllSelected = numSelected === numRows;
+    return isAllSelected;
+  });
+
+  toggleAllRows(isAllSelected: boolean): void {
+    console.log(isAllSelected);
+    if (isAllSelected) {
+      this.selection.set(new SelectionModel<TodoResponseDto>(true, []));
+      return;
+    }
+
+    this.selection.set(
+      new SelectionModel<TodoResponseDto>(
+        true,
+        this.todoTableDataSource().data,
+      ),
+    );
+  }
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: TodoResponseDto): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection().isSelected(row) ? 'deselect' : 'select'} row ${row.id + 1}`;
+  }
+
+  onClickDeleteTodo(event: MouseEvent, todo: TodoResponseDto): void {
+    event.stopPropagation();
+    this.deleteTodo.emit(todo);
+  }
+
+  onClickUpdateTodoStatus(
+    $event: MouseEvent,
+    todo: TodoResponseDto,
+    type: 'complete' | 'reopen',
+  ): void {
+    $event.stopPropagation();
+    this.updateTodo.emit({ todo, type });
+  }
+}

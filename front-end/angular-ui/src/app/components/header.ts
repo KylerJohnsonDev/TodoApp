@@ -17,7 +17,7 @@ import { authStore } from '../utils/auth-store';
   ],
   template: `
     <mat-toolbar class="flex justify-between gap-2">
-      <span>Taskify</span>
+      <a class="text-3xl" routerLink="/">Taskify</a>
       <span class="grow"></span>
       @for (navItem of navItems; track navItem.label) {
         <button mat-flat-button class="">
