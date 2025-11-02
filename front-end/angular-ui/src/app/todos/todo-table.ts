@@ -1,5 +1,4 @@
 import { SelectionModel } from '@angular/cdk/collections';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -26,7 +25,6 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 @Component({
   selector: 'app-todo-table',
   imports: [
-    CommonModule,
     MatCardModule,
     MatTableModule,
     MatCheckboxModule,
@@ -36,35 +34,37 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
     MatDialogModule,
     MatTooltipModule,
   ],
-  styles: [`
-    .table-container {
-      max-height: 500px;
-      overflow: auto;
-      border-radius: 8px;
-    }
-    
-    .status-badge {
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .status-complete {
-      background-color: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-    }
-    
-    .status-incomplete,
-    .status-inprogress {
-      background-color: #fef3c7;
-      color: #92400e;
-      border: 1px solid #fde68a;
-    }
-  `],
+  styles: [
+    `
+      .table-container {
+        max-height: 500px;
+        overflow: auto;
+        border-radius: 8px;
+      }
+
+      .status-badge {
+        padding: 4px 12px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-complete {
+        background-color: #dcfce7;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+      }
+
+      .status-incomplete,
+      .status-inprogress {
+        background-color: #fef3c7;
+        color: #92400e;
+        border: 1px solid #fde68a;
+      }
+    `,
+  ],
   template: `
     <mat-card>
       <mat-card-header class="flex justify-between gap-2 items-center mb-2">
@@ -94,96 +94,98 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
             [dataSource]="todoTableDataSource()"
             class="mat-elevation-z8"
           >
-          <!-- Checkbox Column -->
-          <ng-container matColumnDef="select">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-checkbox
-                (change)="$event ? toggleAllRows(isAllSelected()) : null"
-                [checked]="selection().hasValue() && isAllSelected()"
-                [indeterminate]="selection().hasValue() && !isAllSelected()"
-                [aria-label]="checkboxLabel()"
-              >
-              </mat-checkbox>
-            </th>
-            <td mat-cell *matCellDef="let row">
-              <mat-checkbox
-                (click)="$event.stopPropagation()"
-                (change)="$event ? selection().toggle(row) : null"
-                [checked]="selection().isSelected(row)"
-                [aria-label]="checkboxLabel(row)"
-              >
-              </mat-checkbox>
-            </td>
-          </ng-container>
-
-          <!-- Text Column -->
-          <ng-container matColumnDef="text">
-            <th mat-header-cell *matHeaderCellDef>Task</th>
-            <td mat-cell *matCellDef="let element">{{ element.text }}</td>
-          </ng-container>
-
-          <!-- Status Column -->
-          <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Status</th>
-            <td mat-cell *matCellDef="let element">
-              <span
-                class="status-badge"
-                [class]="{
-                  'status-incomplete': element.status === 'Incomplete',
-                  'status-inprogress': element.status === 'InProgress',
-                  'status-complete': element.status === 'Complete'
-                }"
-              >
-                {{ element.status }}
-              </span>
-            </td>
-          </ng-container>
-
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>Actions</th>
-            <td mat-cell *matCellDef="let element">
-              <div class="flex gap-2">
-                <button
-                  matTooltip="Delete task"
-                  mat-icon-button
-                  (click)="onClickDeleteTodo($event, element)"
+            <!-- Checkbox Column -->
+            <ng-container matColumnDef="select">
+              <th mat-header-cell *matHeaderCellDef>
+                <mat-checkbox
+                  (change)="$event ? toggleAllRows(isAllSelected()) : null"
+                  [checked]="selection().hasValue() && isAllSelected()"
+                  [indeterminate]="selection().hasValue() && !isAllSelected()"
+                  [aria-label]="checkboxLabel()"
                 >
-                  <mat-icon>delete</mat-icon>
-                </button>
-                @if (
-                  element.status === 'Incomplete' ||
-                  element.status === 'InProgress'
-                ) {
-                  <button
-                    matTooltip="Mark as complete"
-                    mat-icon-button
-                    (click)="
-                      onClickUpdateTodoStatus($event, element, 'complete')
-                    "
-                  >
-                    <mat-icon>check_circle</mat-icon>
-                  </button>
-                }
-                @if (element.status === 'Complete') {
-                  <button
-                    matTooltip="Reopen task"
-                    mat-icon-button
-                    (click)="onClickUpdateTodoStatus($event, element, 'reopen')"
-                  >
-                    <mat-icon>replay</mat-icon>
-                  </button>
-                }
-              </div>
-            </td>
-          </ng-container>
+                </mat-checkbox>
+              </th>
+              <td mat-cell *matCellDef="let row">
+                <mat-checkbox
+                  (click)="$event.stopPropagation()"
+                  (change)="$event ? selection().toggle(row) : null"
+                  [checked]="selection().isSelected(row)"
+                  [aria-label]="checkboxLabel(row)"
+                >
+                </mat-checkbox>
+              </td>
+            </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            (click)="selection().toggle(row)"
-          ></tr>
+            <!-- Text Column -->
+            <ng-container matColumnDef="text">
+              <th mat-header-cell *matHeaderCellDef>Task</th>
+              <td mat-cell *matCellDef="let element">{{ element.text }}</td>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef>Status</th>
+              <td mat-cell *matCellDef="let element">
+                <span
+                  class="status-badge"
+                  [class]="{
+                    'status-incomplete': element.status === 'Incomplete',
+                    'status-inprogress': element.status === 'InProgress',
+                    'status-complete': element.status === 'Complete',
+                  }"
+                >
+                  {{ element.status }}
+                </span>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element">
+                <div class="flex gap-2">
+                  <button
+                    matTooltip="Delete task"
+                    mat-icon-button
+                    (click)="onClickDeleteTodo($event, element)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  @if (
+                    element.status === 'Incomplete' ||
+                    element.status === 'InProgress'
+                  ) {
+                    <button
+                      matTooltip="Mark as complete"
+                      mat-icon-button
+                      (click)="
+                        onClickUpdateTodoStatus($event, element, 'complete')
+                      "
+                    >
+                      <mat-icon>check_circle</mat-icon>
+                    </button>
+                  }
+                  @if (element.status === 'Complete') {
+                    <button
+                      matTooltip="Reopen task"
+                      mat-icon-button
+                      (click)="
+                        onClickUpdateTodoStatus($event, element, 'reopen')
+                      "
+                    >
+                      <mat-icon>replay</mat-icon>
+                    </button>
+                  }
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: displayedColumns"
+              (click)="selection().toggle(row)"
+            ></tr>
           </table>
         </div>
       </mat-card-content>
