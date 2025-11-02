@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
   signal,
@@ -10,13 +11,16 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   TodoResponseDto,
   TodoStatus,
 } from '../__generated__/todoAPI/todoApi.schemas';
+import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 
 @Component({
   selector: 'app-todo-table',
@@ -27,6 +31,8 @@ import {
     MatMenuModule,
     MatIconModule,
     MatButtonModule,
+    MatDialogModule,
+    MatTooltipModule,
   ],
   template: `
     <mat-card>
@@ -44,10 +50,7 @@ import {
           Actions
         </button>
         <mat-menu #menu="matMenu">
-          <button
-            mat-menu-item
-            (click)="deleteMultipleTodos.emit(selection().selected)"
-          >
+          <button mat-menu-item (click)="onClickDeleteMultiple()">
             <mat-icon>delete</mat-icon>
             <span>Delete selected</span>
           </button>
@@ -99,8 +102,8 @@ import {
             <td mat-cell *matCellDef="let element">
               <div class="flex gap-2">
                 <button
-                  matMiniFab
-                  class="warn"
+                  matTooltip="Delete task"
+                  mat-icon-button
                   (click)="onClickDeleteTodo($event, element)"
                 >
                   <mat-icon>delete</mat-icon>
@@ -110,8 +113,8 @@ import {
                   element.status === 'InProgress'
                 ) {
                   <button
-                    class="success"
-                    matMiniFab
+                    matTooltip="Mark as complete"
+                    mat-icon-button
                     (click)="
                       onClickUpdateTodoStatus($event, element, 'complete')
                     "
@@ -121,7 +124,8 @@ import {
                 }
                 @if (element.status === 'Complete') {
                   <button
-                    matMiniFab
+                    matTooltip="Reopen task"
+                    mat-icon-button
                     (click)="onClickUpdateTodoStatus($event, element, 'reopen')"
                   >
                     <mat-icon>replay</mat-icon>
@@ -144,6 +148,8 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoTable {
+  private readonly dialog = inject(MatDialog);
+
   readonly displayedColumns = ['select', 'text', 'status', 'actions'];
   readonly todos = input.required<TodoResponseDto[]>();
   readonly todoTableDataSource = computed(() => {
@@ -195,7 +201,39 @@ export class TodoTable {
 
   onClickDeleteTodo(event: MouseEvent, todo: TodoResponseDto): void {
     event.stopPropagation();
-    this.deleteTodo.emit(todo);
+
+    const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
+      data: {
+        type: 'single' as const,
+        todoText: todo.text,
+      },
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.deleteTodo.emit(todo);
+      }
+    });
+  }
+
+  onClickDeleteMultiple(): void {
+    const selectedTodos = this.selection().selected;
+
+    const dialogRef = this.dialog.open(DeleteConfirmationDialog, {
+      data: {
+        type: 'multiple' as const,
+        todoCount: selectedTodos.length,
+      },
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === true) {
+        this.deleteMultipleTodos.emit(selectedTodos);
+        this.selection.set(new SelectionModel<TodoResponseDto>(true, []));
+      }
+    });
   }
 
   onClickUpdateTodoStatus(

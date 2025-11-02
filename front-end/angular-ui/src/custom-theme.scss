@@ -113,46 +113,48 @@ body {
   --green-900: #14532d;
 
   // Override Material buttons with green colors using correct token names
-  @include mat.button-overrides((
-    // Filled button (default raised/flat buttons)
-    filled-container-color: var(--green-600),
-    filled-label-text-color: white,
-    filled-disabled-container-color: var(--green-200),
-    filled-disabled-label-text-color: var(--green-400),
-    
-    // Tonal button
-    tonal-container-color: var(--green-100),
-    tonal-label-text-color: var(--green-800),
-    tonal-disabled-container-color: var(--green-50),
-    tonal-disabled-label-text-color: var(--green-300),
-    
-    // Outlined button
-    outlined-label-text-color: var(--green-700),
-    outlined-outline-color: var(--green-600),
-    outlined-disabled-label-text-color: var(--green-300),
-    outlined-disabled-outline-color: var(--green-200),
-    
-    // Text button
-    text-label-text-color: var(--green-700),
-    text-disabled-label-text-color: var(--green-300),
-  ));
+  @include mat.button-overrides(
+    (
+      // Filled button (default raised/flat buttons)
+      filled-container-color: var(--green-600),
+      filled-label-text-color: white,
+      filled-disabled-container-color: var(--green-200),
+      filled-disabled-label-text-color: var(--green-400),
+      // Tonal button
+      tonal-container-color: var(--green-100),
+      tonal-label-text-color: var(--green-800),
+      tonal-disabled-container-color: var(--green-50),
+      tonal-disabled-label-text-color: var(--green-300),
+      // Outlined button
+      outlined-label-text-color: var(--green-700),
+      outlined-outline-color: var(--green-600),
+      outlined-disabled-label-text-color: var(--green-300),
+      outlined-disabled-outline-color: var(--green-200),
+      // Text button
+      text-label-text-color: var(--green-700),
+      text-disabled-label-text-color: var(--green-300)
+    )
+  );
 
-  @include mat.fab-overrides((
-    // Regular FAB
-    container-color: var(--green-600),
-    foreground-color: white,
-    disabled-state-container-color: var(--green-200),
-    disabled-state-foreground-color: var(--green-400),
-    
-    // Small FAB (mini-fab)
-    small-container-color: var(--green-600),
-    small-foreground-color: white,
-    small-disabled-state-container-color: var(--green-200),
-    small-disabled-state-foreground-color: var(--green-400),
-  ));
+  @include mat.fab-overrides(
+    (
+      // Regular FAB
+      container-color: var(--green-600),
+      foreground-color: white,
+      disabled-state-container-color: var(--green-200),
+      disabled-state-foreground-color: var(--green-400),
+      // Small FAB (mini-fab)
+      small-container-color: var(--green-600),
+      small-foreground-color: white,
+      small-disabled-state-container-color: var(--green-200),
+      small-disabled-state-foreground-color: var(--green-400)
+    )
+  );
 
-  @include mat.icon-button-overrides((
-    icon-color: var(--green-600),
-    disabled-icon-color: var(--green-300),
-  ));
+  @include mat.icon-button-overrides(
+    (
+      icon-color: var(--green-600),
+      disabled-icon-color: var(--green-300),
+    )
+  );
 }
