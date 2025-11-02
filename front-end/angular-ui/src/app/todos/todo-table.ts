@@ -110,6 +110,7 @@ import {
                   element.status === 'InProgress'
                 ) {
                   <button
+                    class="success"
                     matMiniFab
                     (click)="
                       onClickUpdateTodoStatus($event, element, 'complete')
