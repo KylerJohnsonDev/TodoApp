@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
@@ -202,12 +203,51 @@ export class TodoTable {
   private readonly dialog = inject(MatDialog);
   private readonly tableCardContentRef =
     viewChild<ElementRef<HTMLDivElement>>('tableCardContent');
-  readonly tableCardContentHeight = computed(() => {
+
+  private readonly containerSize = signal<{ width: number; height: number }>({
+    width: 0,
+    height: 0,
+  });
+  private resizeObserver: ResizeObserver | null = null;
+
+  // Effect to set up ResizeObserver when element is available
+  private readonly setupResizeObserver = effect(() => {
     const element = this.tableCardContentRef();
+
     if (element) {
-      return element.nativeElement.clientHeight - 16 + 'px';
+      // Clean up existing observer
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+      }
+
+      this.resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const { width, height } = entry.contentRect;
+          this.containerSize.set({ width, height });
+        }
+      });
+
+      this.resizeObserver.observe(element.nativeElement);
+
+      const rect = element.nativeElement.getBoundingClientRect();
+      this.containerSize.set({ width: rect.width, height: rect.height });
     }
-    return '0px';
+
+    return () => {
+      // Clean up ResizeObserver on effect teardown
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+        this.resizeObserver = null;
+      }
+    };
+  });
+
+  readonly tableCardContentHeight = computed(() => {
+    const size = this.containerSize();
+    if (size.height > 0) {
+      return size.height - 16 + 'px'; // Subtract padding
+    }
+    return '400px'; // Fallback height
   });
   readonly displayedColumns = ['select', 'text', 'status', 'actions'];
   readonly todos = input.required<TodoResponseDto[]>();

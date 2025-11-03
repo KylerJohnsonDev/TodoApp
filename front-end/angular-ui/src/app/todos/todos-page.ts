@@ -6,15 +6,13 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
-import { Todo } from './todo';
 import { TodoForm } from './todo-form';
-import { TodoList } from './todo-list';
 import { TodoTable } from './todo-table';
 import { todosStore } from './todos.store';
 
 @Component({
   selector: 'app-todos',
-  imports: [TodoList, TodoForm, MatCardModule, Todo, TodoTable],
+  imports: [TodoForm, MatCardModule, TodoTable],
   template: `
     <mat-card>
       <mat-card-header>

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { MatButtonModule, MatIconButton } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,7 +19,6 @@ import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
     FormsModule,
     RouterLink,
     MatButtonModule,
-    MatIconButton,
   ],
   template: `
     <mat-card class="w-full md:w-96">
