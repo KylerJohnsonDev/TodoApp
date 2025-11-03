@@ -3,10 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
   inject,
   input,
   output,
   signal,
+  viewChild,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -36,12 +38,6 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
   ],
   styles: [
     `
-      .table-container {
-        max-height: 500px;
-        overflow: auto;
-        border-radius: 8px;
-      }
-
       .status-badge {
         padding: 4px 12px;
         border-radius: 12px;
@@ -66,8 +62,8 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
     `,
   ],
   template: `
-    <mat-card>
-      <mat-card-header class="flex justify-between gap-2 items-center mb-2">
+    <mat-card class="grow flex flex-col">
+      <mat-card-header class="flex justify-between gap-2 items-end mb-4">
         <mat-card-title>
           <h3 class="text-2xl">
             {{ todos().length }} Total
@@ -87,12 +83,15 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
           </button>
         </mat-menu>
       </mat-card-header>
-      <mat-card-content>
-        <div class="table-container">
+      <mat-card-content #tableCardContent class="grow">
+        <div
+          class="table-container flex grow w-full overflow-auto"
+          [style.height]="tableCardContentHeight()"
+        >
           <table
             mat-table
             [dataSource]="todoTableDataSource()"
-            class="mat-elevation-z8"
+            class="mat-elevation-zmin-8"
           >
             <!-- Checkbox Column -->
             <ng-container matColumnDef="select">
@@ -180,7 +179,10 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
               </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns; sticky: true"
+            ></tr>
             <tr
               mat-row
               *matRowDef="let row; columns: displayedColumns"
@@ -191,11 +193,22 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
       </mat-card-content>
     </mat-card>
   `,
+  host: {
+    class: 'flex grow',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoTable {
   private readonly dialog = inject(MatDialog);
-
+  private readonly tableCardContentRef =
+    viewChild<ElementRef<HTMLDivElement>>('tableCardContent');
+  readonly tableCardContentHeight = computed(() => {
+    const element = this.tableCardContentRef();
+    if (element) {
+      return element.nativeElement.clientHeight - 16 + 'px';
+    }
+    return '0px';
+  });
   readonly displayedColumns = ['select', 'text', 'status', 'actions'];
   readonly todos = input.required<TodoResponseDto[]>();
   readonly todoTableDataSource = computed(() => {
