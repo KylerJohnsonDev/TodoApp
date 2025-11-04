@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { ActionLogDto } from '../__generated__/todoAPI/todoApi.schemas';
+import { ActionLogDto } from '../../__generated__/todoAPI/todoApi.schemas';
 
 @Component({
   selector: 'app-action-logs-table',

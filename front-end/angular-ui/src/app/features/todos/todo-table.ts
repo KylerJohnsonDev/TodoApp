@@ -22,7 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import {
   TodoResponseDto,
   TodoStatus,
-} from '../__generated__/todoAPI/todoApi.schemas';
+} from '../../__generated__/todoAPI/todoApi.schemas';
 import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
 
 @Component({

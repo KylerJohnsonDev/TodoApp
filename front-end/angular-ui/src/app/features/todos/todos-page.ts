@@ -5,7 +5,7 @@ import {
   inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
+import { TodosService } from '../../__generated__/todoAPI/todos/todos.service';
 import { TodoForm } from './todo-form';
 import { TodoTable } from './todo-table';
 import { todosStore } from './todos.store';

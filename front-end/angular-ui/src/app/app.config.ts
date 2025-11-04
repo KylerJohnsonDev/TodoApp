@@ -18,7 +18,7 @@ import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { filter, take } from 'rxjs';
 import { EMPTY } from 'rxjs/internal/observable/empty';
 import { routes } from './app.routes';
-import { authStore } from './utils/auth-store';
+import { authStore } from './features/auth/auth-store';
 
 export const appConfig: ApplicationConfig = {
   providers: [

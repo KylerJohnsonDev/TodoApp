@@ -4,7 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { authStore } from '../utils/auth-store';
+import { authStore } from '../features/auth/auth-store';
 
 @Component({
   selector: 'app-header',
@@ -20,10 +20,10 @@ import { authStore } from '../utils/auth-store';
       <a class="text-3xl" routerLink="/">Taskify</a>
       <span class="grow"></span>
       @for (navItem of navItems; track navItem.label) {
-        <button mat-flat-button class="">
+        <a mat-flat-button [routerLink]="navItem.routerLink">
           <mat-icon [fontIcon]="navItem.icon" />
           {{ navItem.label }}
-        </button>
+        </a>
       }
       <button
         matIconButton

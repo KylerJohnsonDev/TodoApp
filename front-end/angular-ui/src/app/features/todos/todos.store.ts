@@ -17,8 +17,8 @@ import {
   TodoStatus,
   UpdateMultipleTodoStatusDto,
   UpdateTodoDto,
-} from '../__generated__/todoAPI/todoApi.schemas';
-import { TodosService } from '../__generated__/todoAPI/todos/todos.service';
+} from '../../__generated__/todoAPI/todoApi.schemas';
+import { TodosService } from '../../__generated__/todoAPI/todos/todos.service';
 
 const FETCH_TODOS_KEY = 'FETCH_TODOS_KEY';
 const CREATE_TODO_KEY = 'CREATE_TODO_KEY';

@@ -5,12 +5,12 @@ import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, concatMap, of, pipe, switchMap, tap } from 'rxjs';
-import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
+import { AuthService } from '../../__generated__/todoAPI/auth/auth.service';
 import {
   LoginDto,
   RegisterDto,
   UserDto,
-} from '../__generated__/todoAPI/todoApi.schemas';
+} from '../../__generated__/todoAPI/todoApi.schemas';
 
 interface AuthState {
   user: UserDto | null;

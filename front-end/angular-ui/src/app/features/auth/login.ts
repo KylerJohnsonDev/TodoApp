@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { LoginDto } from '../__generated__/todoAPI/todoApi.schemas';
-import { authStore } from '../utils/auth-store';
+import { LoginDto } from '../../__generated__/todoAPI/todoApi.schemas';
+import { authStore } from './auth-store';
 
 @Component({
   selector: 'app-login',

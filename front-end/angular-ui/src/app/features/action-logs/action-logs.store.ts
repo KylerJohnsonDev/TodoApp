@@ -16,8 +16,8 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap } from 'rxjs';
-import { ActionLogsService } from '../__generated__/todoAPI/action-logs/action-logs.service';
-import { ActionLogsResponseDto } from '../__generated__/todoAPI/todoApi.schemas';
+import { ActionLogsService } from '../../__generated__/todoAPI/action-logs/action-logs.service';
+import { ActionLogsResponseDto } from '../../__generated__/todoAPI/todoApi.schemas';
 
 const ACTION_LOGS_USER_KEY = 'action_logs_user';
 const ACTION_LOGS_ALL_KEY = 'action_logs_all';

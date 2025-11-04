@@ -4,7 +4,7 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { ActionLogsService } from '../__generated__/todoAPI/action-logs/action-logs.service';
+import { ActionLogsService } from '../../__generated__/todoAPI/action-logs/action-logs.service';
 import ActionLogsTable from './action-logs-table';
 import { actionLogsStore } from './action-logs.store';
 

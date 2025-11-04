@@ -6,8 +6,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../__generated__/todoAPI/auth/auth.service';
-import { RegisterDto } from '../__generated__/todoAPI/todoApi.schemas';
+import { AuthService } from '../../__generated__/todoAPI/auth/auth.service';
+import { RegisterDto } from '../../__generated__/todoAPI/todoApi.schemas';
 
 @Component({
   selector: 'app-register',
