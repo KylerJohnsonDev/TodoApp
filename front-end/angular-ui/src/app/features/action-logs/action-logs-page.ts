@@ -17,6 +17,7 @@ import { actionLogsStore } from './action-logs.store';
       [page]="actionLogsStore.page()"
       [pageSize]="actionLogsStore.pageSize()"
       [pageSizeOptions]="actionLogsStore.pageSizeOptions()"
+      [totalItems]="actionLogsStore.totalCount()"
     />
   `,
   styles: `
