@@ -79,7 +79,7 @@ import { ActionLogDto } from '../../__generated__/todoAPI/todoApi.schemas';
         [pageSize]="pageSize()"
         [pageSizeOptions]="pageSizeOptions()"
         [pageIndex]="page()"
-        (page)="onPageChange($event)"
+        (page)="pageChange.emit($event)"
         showFirstLastButtons
         class="mt-4"
       ></mat-paginator>
@@ -127,7 +127,6 @@ export default class ActionLogsTable {
       this.resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const { width, height } = entry.contentRect;
-          console.log({ width, height });
           this.containerSize.set({ width, height });
         }
       });
@@ -154,8 +153,4 @@ export default class ActionLogsTable {
     }
     return '400px'; // Fallback height
   });
-
-  onPageChange(event: PageEvent): void {
-    this.pageChange.emit(event);
-  }
 }

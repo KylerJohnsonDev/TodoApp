@@ -14,10 +14,11 @@ import { actionLogsStore } from './action-logs.store';
   template: `
     <app-action-logs-table
       [actionLogs]="actionLogsStore.actionLogs()"
-      [page]="actionLogsStore.page()"
+      [page]="actionLogsStore.pageIndex()"
       [pageSize]="actionLogsStore.pageSize()"
       [pageSizeOptions]="actionLogsStore.pageSizeOptions()"
       [totalItems]="actionLogsStore.totalCount()"
+      (pageChange)="actionLogsStore.handleTablePageEvent($event)"
     />
   `,
   host: {
@@ -30,7 +31,7 @@ export default class ActionLogsPage {
   readonly actionLogsStore = inject(actionLogsStore);
 
   readonly actionLogsRequestParams = computed(() => ({
-    page: this.actionLogsStore.page(),
+    page: this.actionLogsStore.pageIndex(),
     pageSize: this.actionLogsStore.pageSize(),
   }));
 

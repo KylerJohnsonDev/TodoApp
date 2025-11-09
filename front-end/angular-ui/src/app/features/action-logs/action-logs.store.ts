@@ -6,6 +6,7 @@ import {
 } from '@angular-architects/ngrx-toolkit';
 import { HttpErrorResponse } from '@angular/common/http';
 import { computed, inject } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
@@ -24,7 +25,7 @@ const ACTION_LOGS_ALL_KEY = 'action_logs_all';
 
 interface ActionLogsState {
   actionLogsResponse: ActionLogsResponseDto;
-  page: number;
+  pageIndex: number;
   pageSize: number;
   pageSizeOptions: number[];
 }
@@ -35,7 +36,7 @@ const initialActionLogsState: ActionLogsState = {
     total_count: 0,
     is_last_page: true,
   },
-  page: 1,
+  pageIndex: 0,
   pageSize: 25,
   pageSizeOptions: [25, 50, 100],
 };
@@ -77,5 +78,18 @@ export const actionLogsStore = signalStore(
         }),
       ),
     ),
+    handleTablePageEvent: (event: PageEvent): void => {
+      if (event.pageIndex !== event.previousPageIndex) {
+        patchState(store, {
+          pageIndex: event.pageIndex,
+        });
+      }
+      if (event.pageSize !== store.pageSize()) {
+        patchState(store, {
+          pageIndex: 0,
+          pageSize: event.pageSize,
+        });
+      }
+    },
   })),
 );
