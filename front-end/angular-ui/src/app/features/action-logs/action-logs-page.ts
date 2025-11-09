@@ -31,7 +31,7 @@ export default class ActionLogsPage {
   readonly actionLogsStore = inject(actionLogsStore);
 
   readonly actionLogsRequestParams = computed(() => ({
-    page: this.actionLogsStore.pageIndex(),
+    pageIndex: this.actionLogsStore.pageIndex(),
     pageSize: this.actionLogsStore.pageSize(),
   }));
 

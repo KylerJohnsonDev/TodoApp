@@ -50,13 +50,13 @@ export const actionLogsStore = signalStore(
     isLastPage: computed(() => state.actionLogsResponse().is_last_page ?? true),
   })),
   withMethods((store, actionLogsService = inject(ActionLogsService)) => ({
-    fetchActionLogsForUser: rxMethod<{ page: number; pageSize: number }>(
+    fetchActionLogsForUser: rxMethod<{ pageIndex: number; pageSize: number }>(
       pipe(
-        switchMap(({ page, pageSize }) => {
+        switchMap(({ pageIndex, pageSize }) => {
           patchState(store, setLoading(ACTION_LOGS_USER_KEY));
           return actionLogsService
             .getUserActionLogs({
-              page,
+              page: pageIndex + 1,
               pageSize,
             })
             .pipe(
