@@ -276,7 +276,6 @@ export class TodoTable {
   });
 
   toggleAllRows(isAllSelected: boolean): void {
-    console.log(isAllSelected);
     if (isAllSelected) {
       this.selection.set(new SelectionModel<TodoResponseDto>(true, []));
       return;

@@ -26,72 +26,68 @@ import { ActionLogDto } from '../../__generated__/todoAPI/todoApi.schemas';
     MatDividerModule,
   ],
   template: `
-    <mat-card class="flex flex-col h-full">
-      <mat-card-header class="mb-4">
-        <mat-card-title>
-          <h3 class="text-2xl">Actions Logs</h3>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="flex-1 overflow-auto">
-          <table
-            mat-table
-            [dataSource]="actionLogTableDataSource()"
-            class="mat-elevation-z8 w-full"
-          >
-            <!-- ID Column -->
-            <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef>ID</th>
-              <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-            </ng-container>
-
-            <!-- Username Column -->
-            <ng-container matColumnDef="username">
-              <th mat-header-cell *matHeaderCellDef>Username</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.username || 'Unknown' }}
-              </td>
-            </ng-container>
-
-            <!-- Action Column -->
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef>Action</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.action || 'N/A' }}
-              </td>
-            </ng-container>
-
-            <!-- Timestamp Column -->
-            <ng-container matColumnDef="timestamp">
-              <th mat-header-cell *matHeaderCellDef>Timestamp</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.timestamp | date: 'medium' }}
-              </td>
-            </ng-container>
-
-            <tr
-              mat-header-row
-              *matHeaderRowDef="displayedColumns; sticky: true"
-            ></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-          </table>
-        </div>
-        <mat-paginator
-          [length]="totalItems()"
-          [pageSize]="pageSize()"
-          [pageSizeOptions]="pageSizeOptions()"
-          [pageIndex]="page()"
-          (page)="onPageChange($event)"
-          showFirstLastButtons
-          class="mt-4"
+    <h3 class="text-2xl mb-4">Actions Logs</h3>
+    <div class="grow border-1 rounded-2xl" #tableWrapper>
+      <div
+        class="grow overflow-auto rounded-t-2xl border-b-1"
+        [style.height]="tableCardContentHeight()"
+      >
+        <table
+          mat-table
+          [dataSource]="actionLogTableDataSource()"
+          class="mat-elevation-z8 w-full rounded-2xl"
         >
-        </mat-paginator>
-      </mat-card-content>
-    </mat-card>
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
+
+          <!-- Username Column -->
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef>Username</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.username || 'Unknown' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.action || 'N/A' }}
+            </td>
+          </ng-container>
+
+          <!-- Timestamp Column -->
+          <ng-container matColumnDef="timestamp">
+            <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.timestamp | date: 'medium' }}
+            </td>
+          </ng-container>
+
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <mat-paginator
+        [length]="totalItems()"
+        [pageSize]="pageSize()"
+        [pageSizeOptions]="pageSizeOptions()"
+        [pageIndex]="page()"
+        (page)="onPageChange($event)"
+        showFirstLastButtons
+        class="mt-4"
+      ></mat-paginator>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    class: 'flex flex-col h-full',
+    class: 'flex flex-col grow',
   },
 })
 export default class ActionLogsTable {
@@ -109,9 +105,8 @@ export default class ActionLogsTable {
     return new MatTableDataSource<ActionLogDto>(this.actionLogs());
   });
 
-  readonly actionLogsTableContainerRef = viewChild<ElementRef<HTMLDivElement>>(
-    'actionLogsTableContainer',
-  );
+  readonly tableWrapperElementRef =
+    viewChild<ElementRef<HTMLDivElement>>('tableWrapper');
 
   private readonly containerSize = signal<{ width: number; height: number }>({
     width: 0,
@@ -121,7 +116,7 @@ export default class ActionLogsTable {
 
   // Effect to set up ResizeObserver when element is available
   private readonly setupResizeObserver = effect(() => {
-    const element = this.actionLogsTableContainerRef();
+    const element = this.tableWrapperElementRef();
 
     if (element) {
       // Clean up existing observer
@@ -132,6 +127,7 @@ export default class ActionLogsTable {
       this.resizeObserver = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const { width, height } = entry.contentRect;
+          console.log({ width, height });
           this.containerSize.set({ width, height });
         }
       });
@@ -154,7 +150,7 @@ export default class ActionLogsTable {
   readonly tableCardContentHeight = computed(() => {
     const size = this.containerSize();
     if (size.height > 0) {
-      return size.height - 48 + 'px'; // Subtract padding
+      return size.height - 84 + 'px'; // Subtract padding
     }
     return '400px'; // Fallback height
   });

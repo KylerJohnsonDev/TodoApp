@@ -20,11 +20,9 @@ import { actionLogsStore } from './action-logs.store';
       [totalItems]="actionLogsStore.totalCount()"
     />
   `,
-  styles: `
-    :host {
-      flex: 1;
-    }
-  `,
+  host: {
+    class: 'grow flex flex-col',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ActionLogsService, actionLogsStore],
 })
