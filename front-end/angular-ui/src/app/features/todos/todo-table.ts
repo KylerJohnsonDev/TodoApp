@@ -63,146 +63,141 @@ import { DeleteConfirmationDialog } from './delete-confirmation-dialog';
     `,
   ],
   template: `
-    <mat-card class="grow flex flex-col">
-      <mat-card-header class="flex justify-between gap-2 items-end mb-4">
-        <mat-card-title>
-          <h3 class="text-2xl">
-            {{ todos().length }} Total
-            @if (selection().selected.length > 0) {
-              ({{ selection().selected.length }} Selected)
-            }
-          </h3>
-        </mat-card-title>
-        <button mat-flat-button [matMenuTriggerFor]="menu">
-          <mat-icon>menu</mat-icon>
-          Actions
+    <div class="flex items-center justify-between m-4 px-4">
+      <h3 class="text-2xl">
+        {{ todos().length }} Total Tasks
+        @if (selection().selected.length > 0) {
+          ({{ selection().selected.length }} Selected)
+        }
+      </h3>
+
+      <button mat-flat-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+        Actions
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onClickDeleteMultiple()">
+          <mat-icon>delete</mat-icon>
+          <span>Delete selected</span>
         </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="onClickDeleteMultiple()">
-            <mat-icon>delete</mat-icon>
-            <span>Delete selected</span>
-          </button>
-        </mat-menu>
-      </mat-card-header>
-      <mat-card-content #tableCardContent class="grow">
-        <div
-          class="table-container flex grow w-full overflow-auto"
-          [style.height]="tableCardContentHeight()"
+      </mat-menu>
+    </div>
+    <div class="grow" #tableWrapper>
+      <div
+        class="table-container flex grow w-full overflow-auto"
+        [style.height]="tableCardContentHeight()"
+      >
+        <table
+          mat-table
+          [dataSource]="todoTableDataSource()"
+          class="mat-elevation-zmin-8"
         >
-          <table
-            mat-table
-            [dataSource]="todoTableDataSource()"
-            class="mat-elevation-zmin-8"
-          >
-            <!-- Checkbox Column -->
-            <ng-container matColumnDef="select">
-              <th mat-header-cell *matHeaderCellDef>
-                <mat-checkbox
-                  (change)="$event ? toggleAllRows(isAllSelected()) : null"
-                  [checked]="selection().hasValue() && isAllSelected()"
-                  [indeterminate]="selection().hasValue() && !isAllSelected()"
-                  [aria-label]="checkboxLabel()"
-                >
-                </mat-checkbox>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <mat-checkbox
-                  (click)="$event.stopPropagation()"
-                  (change)="$event ? selection().toggle(row) : null"
-                  [checked]="selection().isSelected(row)"
-                  [aria-label]="checkboxLabel(row)"
-                >
-                </mat-checkbox>
-              </td>
-            </ng-container>
+          <!-- Checkbox Column -->
+          <ng-container matColumnDef="select">
+            <th mat-header-cell *matHeaderCellDef>
+              <mat-checkbox
+                (change)="$event ? toggleAllRows(isAllSelected()) : null"
+                [checked]="selection().hasValue() && isAllSelected()"
+                [indeterminate]="selection().hasValue() && !isAllSelected()"
+                [aria-label]="checkboxLabel()"
+              >
+              </mat-checkbox>
+            </th>
+            <td mat-cell *matCellDef="let row">
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                (change)="$event ? selection().toggle(row) : null"
+                [checked]="selection().isSelected(row)"
+                [aria-label]="checkboxLabel(row)"
+              >
+              </mat-checkbox>
+            </td>
+          </ng-container>
 
-            <!-- Text Column -->
-            <ng-container matColumnDef="text">
-              <th mat-header-cell *matHeaderCellDef>Task</th>
-              <td mat-cell *matCellDef="let element">{{ element.text }}</td>
-            </ng-container>
+          <!-- Text Column -->
+          <ng-container matColumnDef="text">
+            <th mat-header-cell *matHeaderCellDef>Task</th>
+            <td mat-cell *matCellDef="let element">{{ element.text }}</td>
+          </ng-container>
 
-            <!-- Status Column -->
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
-              <td mat-cell *matCellDef="let element">
-                <span
-                  class="status-badge"
-                  [class]="{
-                    'status-incomplete': element.status === 'Incomplete',
-                    'status-inprogress': element.status === 'InProgress',
-                    'status-complete': element.status === 'Complete',
-                  }"
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                class="status-badge"
+                [class]="{
+                  'status-incomplete': element.status === 'Incomplete',
+                  'status-inprogress': element.status === 'InProgress',
+                  'status-complete': element.status === 'Complete',
+                }"
+              >
+                {{ element.status }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <div class="flex gap-2">
+                <button
+                  matTooltip="Delete task"
+                  mat-icon-button
+                  (click)="onClickDeleteTodo($event, element)"
                 >
-                  {{ element.status }}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Actions</th>
-              <td mat-cell *matCellDef="let element">
-                <div class="flex gap-2">
+                  <mat-icon>delete</mat-icon>
+                </button>
+                @if (
+                  element.status === 'Incomplete' ||
+                  element.status === 'InProgress'
+                ) {
                   <button
-                    matTooltip="Delete task"
+                    matTooltip="Mark as complete"
                     mat-icon-button
-                    (click)="onClickDeleteTodo($event, element)"
+                    (click)="
+                      onClickUpdateTodoStatus($event, element, 'complete')
+                    "
                   >
-                    <mat-icon>delete</mat-icon>
+                    <mat-icon>check_circle</mat-icon>
                   </button>
-                  @if (
-                    element.status === 'Incomplete' ||
-                    element.status === 'InProgress'
-                  ) {
-                    <button
-                      matTooltip="Mark as complete"
-                      mat-icon-button
-                      (click)="
-                        onClickUpdateTodoStatus($event, element, 'complete')
-                      "
-                    >
-                      <mat-icon>check_circle</mat-icon>
-                    </button>
-                  }
-                  @if (element.status === 'Complete') {
-                    <button
-                      matTooltip="Reopen task"
-                      mat-icon-button
-                      (click)="
-                        onClickUpdateTodoStatus($event, element, 'reopen')
-                      "
-                    >
-                      <mat-icon>replay</mat-icon>
-                    </button>
-                  }
-                </div>
-              </td>
-            </ng-container>
+                }
+                @if (element.status === 'Complete') {
+                  <button
+                    matTooltip="Reopen task"
+                    mat-icon-button
+                    (click)="onClickUpdateTodoStatus($event, element, 'reopen')"
+                  >
+                    <mat-icon>replay</mat-icon>
+                  </button>
+                }
+              </div>
+            </td>
+          </ng-container>
 
-            <tr
-              mat-header-row
-              *matHeaderRowDef="displayedColumns; sticky: true"
-            ></tr>
-            <tr
-              mat-row
-              *matRowDef="let row; columns: displayedColumns"
-              (click)="selection().toggle(row)"
-            ></tr>
-          </table>
-        </div>
-      </mat-card-content>
-    </mat-card>
+          <tr
+            mat-header-row
+            *matHeaderRowDef="displayedColumns; sticky: true"
+          ></tr>
+          <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            (click)="selection().toggle(row)"
+          ></tr>
+        </table>
+      </div>
+    </div>
   `,
   host: {
-    class: 'flex grow',
+    class: 'flex grow flex-col',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoTable {
   private readonly dialog = inject(MatDialog);
-  private readonly tableCardContentRef =
-    viewChild<ElementRef<HTMLDivElement>>('tableCardContent');
+  private readonly tableWrapperRef =
+    viewChild<ElementRef<HTMLDivElement>>('tableWrapper');
 
   private readonly containerSize = signal<{ width: number; height: number }>({
     width: 0,
@@ -212,7 +207,7 @@ export class TodoTable {
 
   // Effect to set up ResizeObserver when element is available
   private readonly setupResizeObserver = effect(() => {
-    const element = this.tableCardContentRef();
+    const element = this.tableWrapperRef();
 
     if (element) {
       // Clean up existing observer

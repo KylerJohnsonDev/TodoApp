@@ -26,7 +26,7 @@ import { MatInputModule } from '@angular/material/input';
           matInput
           [(ngModel)]="todoText"
           type="text"
-          placeholder="Type new to-do and hit Enter"
+          placeholder="Type new task and hit Enter"
           (keydown.enter)="submitTodo()"
         />
       </mat-form-field>

@@ -14,17 +14,17 @@ import { todosStore } from './todos.store';
   selector: 'app-todos',
   imports: [TodoForm, MatCardModule, TodoTable],
   template: `
-    <mat-card>
+    <!-- <mat-card>
       <mat-card-header>
         <mat-card-title>Add New Task</mat-card-title>
       </mat-card-header>
-      <mat-card-content class="mt-4">
-        <app-todo-form
-          [isLoading]="store.CREATE_TODO_KEYLoading()"
-          (submitNewTodo)="store.createTodo($event)"
-        />
-      </mat-card-content>
-    </mat-card>
+      <mat-card-content class="mt-4"> -->
+    <app-todo-form
+      [isLoading]="store.CREATE_TODO_KEYLoading()"
+      (submitNewTodo)="store.createTodo($event)"
+    />
+    <!-- </mat-card-content>
+    </mat-card> -->
     <app-todo-table
       [todos]="store.todos()"
       (deleteTodo)="store.deleteTodo($event)"
