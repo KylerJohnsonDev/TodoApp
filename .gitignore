@@ -36,76 +36,76 @@ backend/TodoApi/todoapp.db.backup
 # See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
 
 # Compiled output
-front-end/angular-ui/dist
-front-end/angular-ui/tmp
-front-end/angular-ui/out-tsc
-front-end/angular-ui/bazel-out
+frontend/angular-ui/dist
+frontend/angular-ui/tmp
+frontend/angular-ui/out-tsc
+frontend/angular-ui/bazel-out
 
 # Node
-front-end/angular-ui/node_modules
-front-end/angular-ui/npm-debug.log
-front-end/angular-ui/yarn-error.log
+frontend/angular-ui/node_modules
+frontend/angular-ui/npm-debug.log
+frontend/angular-ui/yarn-error.log
 
 # IDEs and editors
-front-end/angular-ui/.idea/
-front-end/angular-ui/.project
-front-end/angular-ui/.classpath
-front-end/angular-ui/.c9/
-front-end/angular-ui/*.launch
-front-end/angular-ui/.settings/
-front-end/angular-ui/*.sublime-workspace
+frontend/angular-ui/.idea/
+frontend/angular-ui/.project
+frontend/angular-ui/.classpath
+frontend/angular-ui/.c9/
+frontend/angular-ui/*.launch
+frontend/angular-ui/.settings/
+frontend/angular-ui/*.sublime-workspace
 
 # Visual Studio Code
-front-end/angular-ui/.vscode/*
-front-end/angular-ui/.vscode/settings.json
-front-end/angular-ui/.vscode/tasks.json
-front-end/angular-ui/.vscode/launch.json
-front-end/angular-ui/.vscode/extensions.json
-front-end/angular-ui/.history/*
+frontend/angular-ui/.vscode/*
+frontend/angular-ui/.vscode/settings.json
+frontend/angular-ui/.vscode/tasks.json
+frontend/angular-ui/.vscode/launch.json
+frontend/angular-ui/.vscode/extensions.json
+frontend/angular-ui/.history/*
 
 # Miscellaneous
-front-end/angular-ui/.angular/cache
-front-end/angular-ui/.sass-cache/
-front-end/angular-ui/connect.lock
-front-end/angular-ui/coverage
-front-end/angular-ui/libpeerconnection.log
-front-end/angular-ui/testem.log
-front-end/angular-ui/typings
+frontend/angular-ui/.angular/cache
+frontend/angular-ui/.sass-cache/
+frontend/angular-ui/connect.lock
+frontend/angular-ui/coverage
+frontend/angular-ui/libpeerconnection.log
+frontend/angular-ui/testem.log
+frontend/angular-ui/typings
 
 # System files
-front-end/angular-ui/.DS_Store
-front-end/angular-ui/Thumbs.db
+frontend/angular-ui/.DS_Store
+frontend/angular-ui/Thumbs.db
 
-front-end/angular-ui/node_modules
-front-end/angular-ui/npm-debug.log
-front-end/angular-ui/yarn-error.log
+frontend/angular-ui/node_modules
+frontend/angular-ui/npm-debug.log
+frontend/angular-ui/yarn-error.log
 
 # IDEs and editors
-front-end/angular-ui/.idea/
-front-end/angular-ui/.project
-front-end/angular-ui/.classpath
-front-end/angular-ui/.c9/
-front-end/angular-ui/*.launch
-front-end/angular-ui/.settings/
-front-end/angular-ui/*.sublime-workspace
+frontend/angular-ui/.idea/
+frontend/angular-ui/.project
+frontend/angular-ui/.classpath
+frontend/angular-ui/.c9/
+frontend/angular-ui/*.launch
+frontend/angular-ui/.settings/
+frontend/angular-ui/*.sublime-workspace
 
 # Visual Studio Code
-front-end/angular-ui/.vscode/*
-!front-end/angular-ui/.vscode/settings.json
-!front-end/angular-ui/.vscode/tasks.json
-!front-end/angular-ui/.vscode/launch.json
-!front-end/angular-ui/.vscode/extensions.json
-front-end/angular-ui.history/*
+frontend/angular-ui/.vscode/*
+!frontend/angular-ui/.vscode/settings.json
+!frontend/angular-ui/.vscode/tasks.json
+!frontend/angular-ui/.vscode/launch.json
+!frontend/angular-ui/.vscode/extensions.json
+frontend/angular-ui.history/*
 
 # Miscellaneous
-front-end/angular-ui/.angular/cache
-front-end/angular-ui/.sass-cache/
-front-end/angular-ui/connect.lock
-front-end/angular-ui/coverage
-front-end/angular-ui/libpeerconnection.log
-front-end/angular-ui/testem.log
-front-end/angular-ui/typings
+frontend/angular-ui/.angular/cache
+frontend/angular-ui/.sass-cache/
+frontend/angular-ui/connect.lock
+frontend/angular-ui/coverage
+frontend/angular-ui/libpeerconnection.log
+frontend/angular-ui/testem.log
+frontend/angular-ui/typings
 
 # System files
-front-end/angular-ui/.DS_Store
-front-end/angular-ui/Thumbs.db
+frontend/angular-ui/.DS_Store
+frontend/angular-ui/Thumbs.db
