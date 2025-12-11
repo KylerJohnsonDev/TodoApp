@@ -25,6 +25,9 @@ backend/TodoApi/Thumbs.db
 
 # Database
 backend/TodoApi/todoapp.db
+backend/TodoApi/todoapp.db-shm
+backend/TodoApi/todoapp.db-wal
+backend/TodoApi/todoapp.db.backup
 
 
 ########
